@@ -1,56 +1,86 @@
 @extends('layouts.app')
 
-@section('title', __('outlet.create'))
+@section('title', __('outlet.edit'))
 
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-6">
+        @if (request('action') == 'delete' && $outlet)
+        @can('delete', $outlet)
+            <div class="card">
+                <div class="card-header">{{ __('outlet.delete') }}</div>
+                <div class="card-body">
+                    <label class="control-label text-primary">{{ __('outlet.name') }}</label>
+                    <p>{{ $outlet->name }}</p>
+                    <label class="control-label text-primary">{{ __('outlet.address') }}</label>
+                    <p>{{ $outlet->address }}</p>
+                    <label class="control-label text-primary">{{ __('outlet.latitude') }}</label>
+                    <p>{{ $outlet->latitude }}</p>
+                    <label class="control-label text-primary">{{ __('outlet.longitude') }}</label>
+                    <p>{{ $outlet->longitude }}</p>
+                    {!! $errors->first('outlet_id', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                </div>
+                <hr style="margin:0">
+                <div class="card-body text-danger">{{ __('outlet.delete_confirm') }}</div>
+                <div class="card-footer">
+                    <form method="POST" action="{{ route('outlets.destroy', $outlet) }}" accept-charset="UTF-8" onsubmit="return confirm(&quot;{{ __('app.delete_confirm') }}&quot;)" class="del-form float-right" style="display: inline;">
+                        {{ csrf_field() }} {{ method_field('delete') }}
+                        <input name="outlet_id" type="hidden" value="{{ $outlet->id }}">
+                        <button type="submit" class="btn btn-danger">{{ __('app.delete_confirm_button') }}</button>
+                    </form>
+                    <a href="{{ route('outlets.edit', $outlet) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                </div>
+            </div>
+        @endcan
+        @else
         <div class="card">
-            <div class="card-header">{{ __('outlet.create') }}</div>
-            <form method="POST" action="{{ route('outlets.store') }}" accept-charset="UTF-8">
-                {{ csrf_field() }}
+            <div class="card-header">{{ __('outlet.edit') }}</div>
+            <form method="POST" action="{{ route('outlets.update', $outlet) }}" accept-charset="UTF-8">
+                {{ csrf_field() }} {{ method_field('patch') }}
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name" class="control-label">{{ __('outlet.name') }}</label>
-                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required>
+                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name', $outlet->name) }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
                     <div class="form-group">
                         <label for="address" class="control-label">{{ __('outlet.address') }}</label>
-                        <div id="address_show">
-                            {{ old('address') }}
+                        <div id="address">
+                            {{ old('address', $outlet->address) }}
                         </div>
-                        {{--                        <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="4">{{ old('address', $outlet->address) }}</textarea>--}}
-                        {{--                        {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}--}}
+{{--                        <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="4">{{ old('address', $outlet->address) }}</textarea>--}}
+{{--                        {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}--}}
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="latitude" class="control-label">{{ __('outlet.latitude') }}</label>
-                                <input id="latitude" type="text" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" name="latitude" value="{{ old('latitude') }}" required>
+                                <input id="latitude" type="text" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" name="latitude" value="{{ old('latitude', $outlet->latitude) }}" required>
                                 {!! $errors->first('latitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="longitude" class="control-label">{{ __('outlet.longitude') }}</label>
-                                <input id="longitude" type="text" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" name="longitude" value="{{ old('longitude') }}" required>
+                                <input id="longitude" type="text" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" name="longitude" value="{{ old('longitude', $outlet->longitude) }}" required>
                                 {!! $errors->first('longitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                             </div>
                         </div>
                     </div>
                     <div id="mapid"></div>
                 </div>
-
                 <div class="card-footer">
-                    <input type="submit" value="{{ __('outlet.create') }}" class="btn btn-success">
-                    <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    <input type="submit" value="{{ __('outlet.update') }}" class="btn btn-success">
+                    <a href="{{ route('outlets.show', $outlet) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @can('delete', $outlet)
+                        <a href="{{ route('outlets.edit', [$outlet, 'action' => 'delete']) }}" id="del-outlet-{{ $outlet->id }}" class="btn btn-danger float-right">{{ __('app.delete') }}</a>
+                    @endcan
                 </div>
-                <input type="hidden" id="address" name="address" value=''>
             </form>
         </div>
     </div>
 </div>
+@endif
 @endsection
 
 @section('styles')
@@ -68,8 +98,8 @@
     integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
     crossorigin=""></script>
 <script>
-    var mapCenter = [{{ request('latitude', config('leaflet.map_center_latitude')) }}, {{ request('longitude', config('leaflet.map_center_longitude')) }}];
-    var map = L.map('mapid').setView(mapCenter, {{ config('leaflet.zoom_level') }});
+    var mapCenter = [{{ $outlet->latitude }}, {{ $outlet->longitude }}];
+    var map = L.map('mapid').setView(mapCenter, {{ config('leaflet.detail_zoom_level') }});
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -78,14 +108,12 @@
     var marker = L.marker(mapCenter).addTo(map);
     function updateMarker(lat, lng) {
         marker
-            .setLatLng([lat, lng])
-            .bindPopup("Адрес :  " + marker.getLatLng().toString())
-            .openPopup();
+        .setLatLng([lat, lng])
+        .bindPopup("Your location :  " + marker.getLatLng().toString())
+        .openPopup();
         return false;
     };
-    $(function() {
-        $('#address').val($('#address_show').text());
-    });
+
     map.on('click', function(e) {
         let latitude = e.latlng.lat.toString().substring(0, 15);
         let longitude = e.latlng.lng.toString().substring(0, 15);
@@ -94,17 +122,13 @@
         updateMarker(latitude, longitude);
         var geocoder = new google.maps.Geocoder;
         var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
-        let street_address1 = '';
-        let street_address2 = '';
-        let city = '';
-        let address_street = '';
-        geocoder.geocode({'location': latlng}, function (results, status) {
+        let street_address1=''; let street_address2=''; let city='';
+        geocoder.geocode({'location': latlng}, function(results, status) {
             if (status === 'OK') {
+                console.log ('Результаты ', results);
                 if (results[0]) {
-                    let f_address = results[0].formatted_address;
-                    console.log(results[0]);
-                    $('#address_show').text(f_address);
-                    $('#address').val(f_address);
+                    console.log (results[0].address_components);
+                    $("#address").text(results[0].formatted_address);
 
                     for (var i = 0; i < results[0].address_components.length; i++) {
                         let expr_short = results[0].address_components[i].short_name;
@@ -112,6 +136,7 @@
                         switch (results[0].address_components[i].types[0]) {
                             case 'locality':
                                 city = expr_long;
+                                console.log ('Город ', city);
                                 break;
                             case 'route':
                                 street_address1 = expr_short;
@@ -123,17 +148,18 @@
 
                     }
 
-                    address_street = street_address1.concat(', ', street_address2);
-
-                    console.log('street_address', address_street);
+                    let address = street_address1.concat(', ',  street_address2);
+                    console.log(address);
                 }
                 if (results[7]) {
+                    console.log (results[7].address_components);
 
                     for (var i = 0; i < results[7].address_components.length; i++) {
                         let expr_long = results[7].address_components[i].long_name;
                         switch (results[7].address_components[i].types[0]) {
                             case 'locality':
                                 city = expr_long;
+                                console.log ('Город ', city);
                                 break;
                         }
 
@@ -141,25 +167,8 @@
 
 
                 }
-
-            }
-            if (address_street) {
-                if ($('#address_street').length > 0) {
-                    $('#address_street').val(address_street);
-                } else {
-                    $('input[name="address"]').after("<input type=\"hidden\" id=\"address_street\" name=\"address_street\" value=\"".concat(address_street, "\">"));
-                }
-            }
-            if (city) {
-                if ($('#address_city').length > 0) {
-                    $('#address_city').val(city);
-                } else {
-                    $('input[name="address"]').after("<input type=\"hidden\" id=\"address_city\" name=\"address_city\" value=\"".concat(city, "\">"));
-                }
             }
         });
-
-
     });
 
     var updateMarkerByInputs = function() {
@@ -171,5 +180,4 @@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3JB5sIKFVtNLuEaxq9cuAJVNuWLyFVYw&language=en">
 </script>
-
 @endpush

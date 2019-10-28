@@ -21,11 +21,7 @@
                 @can('update', $outlet)
                     <a href="{{ route('outlets.edit', $outlet) }}" id="edit-outlet-{{ $outlet->id }}" class="btn btn-warning">{{ __('outlet.edit') }}</a>
                 @endcan
-                @if(auth()->check())
-                    <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('outlet.back_to_index') }}</a>
-                @else
-                    <a href="{{ route('outlet_map.index') }}" class="btn btn-link">{{ __('outlet.back_to_index') }}</a>
-                @endif
+                <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('outlet.back_to_index') }}</a>
             </div>
         </div>
     </div>
@@ -64,7 +60,7 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    L.marker([{{ $outlet->latitude }}, {{ $outlet->longitude }}]).addTo(map)
-        .bindPopup('{!! $outlet->map_popup_content !!}');
+    var marker = L.marker([{{ $outlet->latitude }}, {{ $outlet->longitude }}]).addTo(map);
+        marker.bindPopup("Адрес :  " + marker.getLatLng().toString());
 </script>
 @endpush

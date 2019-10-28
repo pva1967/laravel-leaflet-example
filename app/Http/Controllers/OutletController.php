@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Outlet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use SoapBox\Formatter\Formatter;
+use Geocoder\Provider\Chain\Chain;
+use Geocoder\Provider\GeoPlugin\GeoPlugin;
+use Geocoder\Provider\GoogleMaps\GoogleMaps;
+
 
 class OutletController extends Controller
 {
@@ -16,11 +23,18 @@ class OutletController extends Controller
     {
         $this->authorize('manage_outlet');
 
-        $outletQuery = Outlet::query();
-        $outletQuery->where('name', 'like', '%'.request('q').'%');
-        $outlets = $outletQuery->paginate(25);
+            // the user can do everything
+        $user_id=Auth::id();
 
-        return view('outlets.index', compact('outlets'));
+            $outletQuery = Outlet::query();
+            $outletQuery->where('name', 'like', '%' . request('q') . '%')->where('creator_id', $user_id);
+            $outlets = $outletQuery->paginate(25);
+//        $test = Auth::user()->name ;
+//        $contents = Storage::disk('public')->get($test.'.xml');
+//        $formatter = Formatter::make($contents, Formatter::XML);
+//        $contents = var_export($formatter->toArray());
+            return view('outlets.index', compact('outlets'));
+
     }
 
     /**
@@ -48,13 +62,14 @@ class OutletController extends Controller
         $newOutlet = $request->validate([
             'name'      => 'required|max:60',
             'address'   => 'nullable|max:255',
+            'address_street'   => 'nullable|max:255',
+            'address_city'   => 'nullable|max:255',
             'latitude'  => 'nullable|required_with:longitude|max:15',
             'longitude' => 'nullable|required_with:latitude|max:15',
         ]);
         $newOutlet['creator_id'] = auth()->id();
 
         $outlet = Outlet::create($newOutlet);
-
         return redirect()->route('outlets.show', $outlet);
     }
 
@@ -66,6 +81,7 @@ class OutletController extends Controller
      */
     public function show(Outlet $outlet)
     {
+        Auth::user();
         return view('outlets.show', compact('outlet'));
     }
 
@@ -96,9 +112,12 @@ class OutletController extends Controller
         $outletData = $request->validate([
             'name'      => 'required|max:60',
             'address'   => 'nullable|max:255',
+            'address_street'   => 'nullable|max:255',
+            'address_city'   => 'nullable|max:255',
             'latitude'  => 'nullable|required_with:longitude|max:15',
             'longitude' => 'nullable|required_with:latitude|max:15',
         ]);
+
         $outlet->update($outletData);
 
         return redirect()->route('outlets.show', $outlet);

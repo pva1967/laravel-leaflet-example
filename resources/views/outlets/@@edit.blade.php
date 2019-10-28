@@ -45,7 +45,7 @@
                     </div>
                     <div class="form-group">
                         <label for="address" class="control-label">{{ __('outlet.address') }}</label>
-                        <div id="address_show">
+                        <div id="address">
                             {{ old('address', $outlet->address) }}
                         </div>
 {{--                        <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="4">{{ old('address', $outlet->address) }}</textarea>--}}
@@ -76,7 +76,6 @@
                         <a href="{{ route('outlets.edit', [$outlet, 'action' => 'delete']) }}" id="del-outlet-{{ $outlet->id }}" class="btn btn-danger float-right">{{ __('app.delete') }}</a>
                     @endcan
                 </div>
-                <input type="hidden" id="address" name="address" value=''>
             </form>
         </div>
     </div>
@@ -99,7 +98,6 @@
     integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
     crossorigin=""></script>
 <script>
-
     var mapCenter = [{{ $outlet->latitude }}, {{ $outlet->longitude }}];
     var map = L.map('mapid').setView(mapCenter, {{ config('leaflet.detail_zoom_level') }});
 
@@ -107,37 +105,30 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-
     var marker = L.marker(mapCenter).addTo(map);
     function updateMarker(lat, lng) {
         marker
         .setLatLng([lat, lng])
-         .bindPopup("Адрес :  " + marker.getLatLng().toString())
-         .openPopup();
+        .bindPopup("Your location :  " + marker.getLatLng().toString())
+        .openPopup();
         return false;
     };
-    $(function() {
-        $('#address').val($('#address_show').text());
-    });
+
     map.on('click', function(e) {
         let latitude = e.latlng.lat.toString().substring(0, 15);
         let longitude = e.latlng.lng.toString().substring(0, 15);
         $('#latitude').val(latitude);
         $('#longitude').val(longitude);
         updateMarker(latitude, longitude);
-        var geocoder = new google.maps.Geocoder;
+        // var geocoder = new google.maps.Geocoder;
         var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
-        let street_address1 = '';
-        let street_address2 = '';
-        let city = '';
-        let address_street = '';
-        geocoder.geocode({'location': latlng}, function (results, status) {
+        let street_address1=''; let street_address2=''; let city='';
+        geocoder_en.geocode({'location': latlng}, function(results, status) {
             if (status === 'OK') {
+                console.log ('Результаты ', results);
                 if (results[0]) {
-                    let f_address = results[0].formatted_address;
-                    console.log(results[0]);
-                    $('#address_show').text(f_address);
-                    $('#address').val(f_address);
+                    console.log (results[0].address_components);
+                    $("#address").text(results[0].formatted_address);
 
                     for (var i = 0; i < results[0].address_components.length; i++) {
                         let expr_short = results[0].address_components[i].short_name;
@@ -145,7 +136,7 @@
                         switch (results[0].address_components[i].types[0]) {
                             case 'locality':
                                 city = expr_long;
-                                console.log('Город ', city);
+                                console.log ('Город ', city);
                                 break;
                             case 'route':
                                 street_address1 = expr_short;
@@ -157,18 +148,18 @@
 
                     }
 
-                    address_street = street_address1.concat(', ', street_address2);
-
-                    console.log('street_address', address_street);
+                    let address = street_address1.concat(', ',  street_address2);
+                    console.log(address);
                 }
                 if (results[7]) {
+                    console.log (results[7].address_components);
 
                     for (var i = 0; i < results[7].address_components.length; i++) {
                         let expr_long = results[7].address_components[i].long_name;
                         switch (results[7].address_components[i].types[0]) {
                             case 'locality':
                                 city = expr_long;
-                                console.log('Город ', city);
+                                console.log ('Город ', city);
                                 break;
                         }
 
@@ -176,33 +167,15 @@
 
 
                 }
-
-            }
-            if (address_street) {
-                if ($('#address_street').length > 0) {
-                    $('#address_street').val(address_street);
-                } else {
-                    $('input[name="address"]').after("<input type=\"hidden\" id=\"address_street\" name=\"address_street\" value=\"".concat(address_street, "\">"));
-                }
-            }
-            if (city) {
-                if ($('#address_city').length > 0) {
-                    $('#address_city').val(city);
-                } else {
-                    $('input[name="address"]').after("<input type=\"hidden\" id=\"address_city\" name=\"address_city\" value=\"".concat(city, "\">"));
-                }
             }
         });
-
-
     });
-    var updateMarkerByInputs = function () {
-        return updateMarker($('#latitude').val(), $('#longitude').val());
+
+    var updateMarkerByInputs = function() {
+        return updateMarker( $('#latitude').val() , $('#longitude').val());
     }
     $('#latitude').on('input', updateMarkerByInputs);
     $('#longitude').on('input', updateMarkerByInputs);
 </script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3JB5sIKFVtNLuEaxq9cuAJVNuWLyFVYw&language=en">
-</script>
+
 @endpush

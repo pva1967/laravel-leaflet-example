@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OutletMapController extends Controller
 {
@@ -14,6 +15,12 @@ class OutletMapController extends Controller
      */
     public function index(Request $request)
     {
-        return view('outlets.map');
+        if (Auth::check()) {
+            $user_id=Auth::id();
+            return view('outlets.map', compact('user_id'));
+        }
+       else {
+           return view('auth.login');
+       }
     }
 }

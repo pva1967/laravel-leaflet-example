@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<institutions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="institution.xsd">
+	<institution>
+		<country>ru</country>
+		<type>3</type>
+		<inst_realm>dhi-moskau.org</inst_realm>
+		<org_name lang="en">DHI Moskau</org_name>
+		<address>
+			<street>Voroncovskaja ulica 8/7</street>
+			<city>Moscow</city>
+		</address>
+		<contact>
+			<name>Eugen Bastron</name>
+			<email>Eugen.Bastron@dhi-moskau.org</email>
+			<phone></phone>
+		</contact>
+		<info_URL lang="en"/>
+		<info_URL lang="ru">http://www.eduroam.ru/</info_URL>
+		<policy_URL lang="en"/>
+		<policy_URL lang="ru">http://www.eduroam.ru/</policy_URL>
+		<ts>2019-10-11T12:00:00.0Z</ts>
+		<location>			
+			<longitude>37.656120</longitude>
+			<latitude>55.738883</latitude>
+			<loc_name lang="en">DHI Moskau</loc_name>
+			<address>
+				<street>Voroncovskaja ulica 8/7</street>
+				<city>Moscow</city>
+			</address>
+			<SSID>eduroam</SSID>
+			<enc_level>WPA2/AES</enc_level>
+			<port_restrict>false</port_restrict>
+			<transp_proxy>false</transp_proxy>
+			<IPv6>false</IPv6>
+			<NAT>true</NAT>
+			<AP_no>5</AP_no>
+			<wired>false</wired>
+            <info_URL lang="en">http://www.eduroam.ru/</info_URL>
+		</location>
+	</institution>
+
+</institutions>

@@ -2,13 +2,13 @@
 
 return [
     // Labels
-    'outlet'        => 'Outlet',
-    'list'          => 'Outlet List',
+    'outlet'        => 'Локация',
+    'list'          => 'Список локаций',
     'search'        => 'Search Outlet',
     'search_text'   => 'Name ...',
-    'all'           => 'All Outlet',
+    'all'           => 'Все локации',
     'select'        => 'Select Outlet',
-    'detail'        => 'Outlet Detail',
+    'detail'        => 'Атрибуты локации',
     'not_found'     => 'Outlet not found.',
     'empty'         => 'Outlet is empty.',
     'back_to_show'  => 'Back to Outlet Detail',
@@ -30,8 +30,8 @@ return [
     // Attributes
     'name'       => 'Outlet Name',
     'address'    => 'Outlet Address',
-    'latitude'   => 'Latitude',
-    'longitude'  => 'Longitude',
+    'latitude'   => 'Широта',
+    'longitude'  => 'Долгота',
     'location'   => 'Location',
     'coordinate' => 'Coordinate',
 ];
