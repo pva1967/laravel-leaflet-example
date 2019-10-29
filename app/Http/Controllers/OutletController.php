@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use SoapBox\Formatter\Formatter;
 use Geocoder\Provider\Chain\Chain;
@@ -81,8 +82,14 @@ class OutletController extends Controller
      */
     public function show(Outlet $outlet)
     {
-        Auth::user();
-        return view('outlets.show', compact('outlet'));
+        $user = Auth::user();
+        if (Gate::forUser($user)->allows('view-post', $outlet))  {
+            return view('outlets.show', compact('outlet'));
+        }
+        else {
+            return (redirect('/'));
+        }
+
     }
 
     /**
@@ -93,10 +100,18 @@ class OutletController extends Controller
      */
     public function edit(Outlet $outlet)
     {
-        $this->authorize('update', $outlet);
+        $user = Auth::user();
+        if (Gate::forUser($user)->allows('view-post', $outlet))
+        {
+            return view('outlets.edit', compact('outlet'));
+        }
+        else
+        {
+            return (redirect('/'));
+        }
 
-        return view('outlets.edit', compact('outlet'));
     }
+
 
     /**
      * Update the specified outlet in storage.

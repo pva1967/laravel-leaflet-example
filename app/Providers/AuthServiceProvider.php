@@ -33,8 +33,8 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage_outlet', function () {
             return auth()->check();
             });
-        Gate::define('view-post', function ($user, $post) {
-            return $user->id == $post->creator_id;
+        Gate::define('view-post', function ($user, $outlet) {
+            return $user->id == $outlet->creator_id;
         });
     }
 }
