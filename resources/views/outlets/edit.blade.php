@@ -23,7 +23,7 @@
                 <hr style="margin:0">
                 <div class="card-body text-danger">{{ __('outlet.delete_confirm') }}</div>
                 <div class="card-footer">
-                    <form method="POST" action="{{ route('outlets.destroy', $outlet) }}" accept-charset="UTF-8" onsubmit="return confirm(&quot;{{ __('app.delete_confirm') }}&quot;)" class="del-form float-right" style="display: inline;">
+                    <form method="POST" action="{{ route('outlets.destroy', $outlet) }}" accept-charset="UTF-8" onsubmit="return confirm({{ __('app.delete_confirm') }})" class="del-form float-right" style="display: inline;">
                         {{ csrf_field() }} {{ method_field('delete') }}
                         <input name="outlet_id" type="hidden" value="{{ $outlet->id }}">
                         <button type="submit" class="btn btn-danger">{{ __('app.delete_confirm_button') }}</button>
@@ -124,6 +124,8 @@
         let longitude = e.latlng.lng.toString().substring(0, 15);
         $('#latitude').val(latitude);
         $('#longitude').val(longitude);
+
+
         updateMarker(latitude, longitude);
         var geocoder = new google.maps.Geocoder;
         var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};

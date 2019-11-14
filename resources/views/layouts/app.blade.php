@@ -37,7 +37,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        <li class="nav-item"><a class="nav-link" href="{{ route('outlet_map.index') }}">{{ __('menu.our_outlets') }}</a></li>
+
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -48,6 +48,10 @@
                                 @endif
                             </li>
                         @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('institution.show') }}">{{ __('institution.list') }}</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('outlet_map.index') }}">{{ __('menu.our_outlets') }}</a></li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('outlets.index') }}">{{ __('outlet.list') }}</a>
                             </li>
@@ -81,7 +85,11 @@
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-{{--    <script src="{{ asset('js/geo_en.js') }}"></script>--}}
+    <script src="{{ asset('js/leaflet.markercluster-src.js') }}"></script>
+ <script>
+     $('a[href="' + window.location.href + '"]').addClass('active');
+
+ </script>
     @stack('scripts')
 </body>
 </html>

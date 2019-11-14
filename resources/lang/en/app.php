@@ -11,7 +11,7 @@ return [
     'show'           => 'View Detail',
     'edit'           => 'Edit',
     'delete'         => 'Delete',
-    'cancel'         => 'Cancel',
+    'cancel'         => 'Отменить',
     'reset'          => 'Reset',
     'delete_confirm' => 'Are you sure to delete this?',
     'delete_confirm_button' => 'YES, delete it!',

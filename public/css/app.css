@@ -2407,6 +2407,10 @@ textarea.form-control {
 
 .form-group {
   margin-bottom: 1rem;
+    font-weight: 900;
+}
+.form-group label{
+    font-weight: 400;
 }
 
 .form-text {
@@ -4721,6 +4725,10 @@ input[type="button"].btn-block {
 .nav-link:focus {
   text-decoration: none;
 }
+.nav-link:active {
+    coor: #dd00c0;
+    text-decoration: none;
+}
 
 .nav-link.disabled {
   color: #6c757d;
@@ -5189,6 +5197,10 @@ input[type="button"].btn-block {
   color: rgba(0, 0, 0, 0.5);
 }
 
+a.active {
+    color: rgba(100, 0, 0, 1);
+}
+
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link:focus {
   color: rgba(0, 0, 0, 0.7);
@@ -5203,6 +5215,10 @@ input[type="button"].btn-block {
 .navbar-light .navbar-nav .nav-link.show,
 .navbar-light .navbar-nav .nav-link.active {
   color: rgba(0, 0, 0, 0.9);
+}
+
+.navbar-light .navbar-nav .nav-link.active {
+    color: rgb(100, 0, 0);
 }
 
 .navbar-light .navbar-toggler {

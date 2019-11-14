@@ -22,3 +22,9 @@ Route::get('/home', 'HomeController@index')->name('home');
  */
 Route::get('/our_outlets', 'OutletMapController@index')->name('outlet_map.index');
 Route::resource('outlets', 'OutletController');
+/* Institution Routes*/
+
+Route::post('institution/store','InstitutionController@store')->name('institution.store');
+Route::get('institution', 'InstitutionController@show')->name('institution.show');
+Route::get('institution/edit', 'InstitutionController@edit')->name('institution.edit');
+
