@@ -2,8 +2,6 @@
 
 namespace App\Policies;
 
-use App\User;
-use App\Outlet;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class OutletPolicy
@@ -17,7 +15,7 @@ class OutletPolicy
      * @param \App\Outlet $outlet
      * @return mixed
      */
-    public function view(User $user, Outlet $outlet)
+    public function view()
     {
         // Update $user authorization to view $outlet here.
         return true;
@@ -30,7 +28,7 @@ class OutletPolicy
      * @param \App\Outlet $outlet
      * @return mixed
      */
-    public function create(User $user, Outlet $outlet)
+    public function create()
     {
         // Update $user authorization to create $outlet here.
         return true;
@@ -43,7 +41,7 @@ class OutletPolicy
      * @param \App\Outlet $outlet
      * @return mixed
      */
-    public function update(User $user, Outlet $outlet)
+    public function update()
     {
         // Update $user authorization to update $outlet here.
         return true;
@@ -56,7 +54,12 @@ class OutletPolicy
      * @param \App\Outlet $outlet
      * @return mixed
      */
-    public function delete(User $user, Outlet $outlet)
+    public function delete()
+    {
+        // Update $user authorization to delete $outlet here.
+        return true;
+    }
+    public function manage_outlet()
     {
         // Update $user authorization to delete $outlet here.
         return true;

@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Outlet extends Model
@@ -13,7 +12,7 @@ class Outlet extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'address', 'address_street', 'address_city', 'latitude', 'longitude', 'creator_id',
+        'name', 'address_street', 'address_city', 'latitude', 'longitude', 'creator_id',
     ];
 
     /**
@@ -53,6 +52,8 @@ class Outlet extends Model
         return $this->belongsTo(User::class);
     }
 
+
+
     /**
      * Get outlet coordinate attribute.
      *
@@ -63,6 +64,7 @@ class Outlet extends Model
         if ($this->latitude && $this->longitude) {
             return $this->latitude.', '.$this->longitude;
         }
+        else return '';
     }
 
     /**

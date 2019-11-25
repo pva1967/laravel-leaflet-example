@@ -11,9 +11,17 @@
                 <table class="table table-sm">
                     <tbody>
                         <tr><td>{{ __('outlet.name') }}</td><td>{{ $outlet->name }}</td></tr>
-                        <tr><td>{{ __('outlet.address') }}</td><td>{{ $outlet->address }}</td></tr>
+                        <tr><td>{{ __('outlet.address_city') }}</td><td>{{ $outlet->address_city }}</td></tr>
+                        <tr><td>{{ __('outlet.address_street') }}</td><td>{{ $outlet->address_street }}</td></tr>
                         <tr><td>{{ __('outlet.latitude') }}</td><td>{{ $outlet->latitude }}</td></tr>
                         <tr><td>{{ __('outlet.longitude') }}</td><td>{{ $outlet->longitude }}</td></tr>
+                        <tr><td>{{ __('outlet.contacts') }}</td><td>
+                                @if (!empty($contacts))
+                                    @foreach($contacts as $key => $contact)
+                                        {{$key+1}}.&nbsp;{{$contact->name}}<br>
+                                    @endforeach
+                                @endif
+                            </td></tr>
                     </tbody>
                 </table>
             </div>
@@ -21,6 +29,7 @@
                 @can('update', $outlet)
                     <a href="{{ route('outlets.edit', $outlet) }}" id="edit-outlet-{{ $outlet->id }}" class="btn btn-warning">{{ __('outlet.edit') }}</a>
                 @endcan
+                    <a href="{{ route('cont2outlets.edit', $outlet ) }}" id="edit-outlet-{{ $outlet->id }}" class="btn btn-warning">{{ __('contact.add_contacts') }}</a>
                 <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('outlet.back_to_index') }}</a>
             </div>
         </div>
@@ -49,18 +58,16 @@
 @endsection
 @push('scripts')
 <!-- Make sure you put this AFTER Leaflet's CSS -->
-<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-    integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-    crossorigin=""></script>
+
 
 <script>
-    var map = L.map('mapid').setView([{{ $outlet->latitude }}, {{ $outlet->longitude }}], {{ config('leaflet.detail_zoom_level') }});
+    var map = L.map('mapid').setView([{{ $outlet->latitude }}, {{ $outlet->longitude }}],{{ config('leaflet.detail_zoom_level') }});
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var marker = L.marker([{{ $outlet->latitude }}, {{ $outlet->longitude }}]).addTo(map);
+    var marker = L.marker([{{ $outlet->latitude }},{{ $outlet->longitude }}]).addTo(map);
         marker.bindPopup("Адрес :  " + marker.getLatLng().toString());
 </script>
 @endpush

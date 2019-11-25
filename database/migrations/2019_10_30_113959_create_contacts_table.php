@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOutletsTable extends Migration
+class CreateContactsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateOutletsTable extends Migration
      */
     public function up()
     {
-        Schema::create('outlets', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 60);
-            $table->string('address_street')->nullable();
-            $table->string('address_city')->nullable();
-            $table->string('latitude', 15)->nullable();
-            $table->string('longitude', 15)->nullable();
-            $table->unsignedInteger('creator_id');
             $table->timestamps();
-
+            $table->string('name')->unique();
+            $table->string('email');
+            $table->string('phone');
+            $table->enum('type', ['1', '0']);
+            $table->enum('language', ['en', 'ru']);
+            $table->unsignedInteger('creator_id');
             $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 
@@ -34,6 +34,6 @@ class CreateOutletsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('outlets');
+        Schema::dropIfExists('contacts');
     }
 }

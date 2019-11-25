@@ -4,13 +4,13 @@ return [
     // Labels
     'table_no'          => '#',
     'total'             => 'Total',
-    'action'            => 'Actions',
+    'action'            => 'Действия',
     'show_detail_title' => 'View :name :type detail',
 
     // Actions
     'show'           => 'View Detail',
     'edit'           => 'Edit',
-    'delete'         => 'Delete',
+    'delete'         => 'Удалить',
     'cancel'         => 'Отменить',
     'reset'          => 'Reset',
     'delete_confirm' => 'Are you sure to delete this?',

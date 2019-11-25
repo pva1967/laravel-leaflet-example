@@ -5,12 +5,8 @@ namespace App\Http\Controllers;
 use App\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
-use SoapBox\Formatter\Formatter;
-use Geocoder\Provider\Chain\Chain;
-use Geocoder\Provider\GeoPlugin\GeoPlugin;
-use Geocoder\Provider\GoogleMaps\GoogleMaps;
 
 
 class OutletController extends Controller
@@ -62,14 +58,12 @@ class OutletController extends Controller
 
         $newOutlet = $request->validate([
             'name'      => 'required|max:60',
-            'address'   => 'nullable|max:255',
             'address_street'   => 'nullable|max:255',
             'address_city'   => 'nullable|max:255',
             'latitude'  => 'nullable|required_with:longitude|max:15',
             'longitude' => 'nullable|required_with:latitude|max:15',
         ]);
         $newOutlet['creator_id'] = auth()->id();
-
         $outlet = Outlet::create($newOutlet);
         return redirect()->route('outlets.show', $outlet);
     }
@@ -83,8 +77,15 @@ class OutletController extends Controller
     public function show(Outlet $outlet)
     {
         $user = Auth::user();
+
+            $contacts=DB::table('contacts')
+               ->join('cont2locs','cont2locs.cont_id' , '=' , 'contacts.id')
+                ->where('cont2locs.loc_id', '=', $outlet->id)
+                ->select('contacts.*')->get();
+
+        //dd($contacts);
         if (Gate::forUser($user)->allows('view-post', $outlet))  {
-            return view('outlets.show', compact('outlet'));
+            return view('outlets.show', compact('outlet', 'contacts'));
         }
         else {
             return (redirect('/'));
@@ -100,16 +101,8 @@ class OutletController extends Controller
      */
     public function edit(Outlet $outlet)
     {
-        $user = Auth::user();
-        if (Gate::forUser($user)->allows('view-post', $outlet))
-        {
-            return view('outlets.edit', compact('outlet'));
-        }
-        else
-        {
-            return (redirect('/'));
-        }
-
+        $this->authorize('update', $outlet);
+        return view('outlets.edit', compact('outlet'));
     }
 
 
@@ -126,13 +119,11 @@ class OutletController extends Controller
 
         $outletData = $request->validate([
             'name'      => 'required|max:60',
-            'address'   => 'nullable|max:255',
             'address_street'   => 'nullable|max:255',
             'address_city'   => 'nullable|max:255',
             'latitude'  => 'nullable|required_with:longitude|max:15',
             'longitude' => 'nullable|required_with:latitude|max:15',
         ]);
-
         $outlet->update($outletData);
 
         return redirect()->route('outlets.show', $outlet);

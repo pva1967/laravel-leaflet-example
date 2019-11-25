@@ -8,25 +8,30 @@
 
         <div class="card">
             <div class="card-header">{{ __('institution.show') }}</div>
-                {{ csrf_field() }}
-                <div class="card-body">
-                    <div class="form-group" >
-                        <label> Наименование:&nbsp; </label>{{ $institution->name_en }}
-                    </div>
-                    <div class="form-group" >
-                        <label> Город:&nbsp; </label> {{ $institution->address_city }}
-                    </div>
-                    <div class="form-group" >
-                        <label> Адрес:&nbsp; </label> {{ $institution->address_street }}
-                    </div>
-
-                    <div id="mapid"></div>
+            <div class="card-body">
+                <div class="form-group" >
+                    <label> Наименование:&nbsp; </label>{{ $institution->name_en }}
                 </div>
-                <div class="card-footer">
-                    <a href="{{ route('institution.edit') }}" id="edit-outlet-{{ $institution->id }}" class="btn btn-warning">{{ __('institution.edit') }}</a>
-
+                <div class="form-group" >
+                    <label> Город:&nbsp; </label> <span id="ad_city">{{ $institution->address_city }}</span>
                 </div>
+                <div class="form-group" >
+                    <label> Адрес:&nbsp; </label> <span id="ad_street">{{ $institution->address_street }}</span>
+                </div>
+                <div class="form-group" >{{ __('outlet.contacts') }}<br>
+                    @if (!empty($contacts))
+                        @foreach($contacts as $key => $contact)
+                            {{$key+1}}.&nbsp;{{$contact->name}}<br>
+                        @endforeach
+                    @endif
+                </div>
+                <div id="mapid"></div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ route('institution.edit') }}" id="edit-institution-{{ $institution->id }}" class="btn btn-warning">{{ __('institution.edit') }}</a>
+                <a href="{{ route('contacts2institution.edit') }}" id="edit-institution" class="btn btn-warning">{{ __('contact.add_contacts') }}</a>
 
+            </div>
         </div>
     </div>
 </div>
@@ -42,16 +47,13 @@
 @endsection
 
 @push('scripts')
-    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-            integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-            crossorigin=""></script>
+
     <script>
         var mapCenter = [{{ $institution->latitude > 0 ? $institution->latitude : config('leaflet.map_small_center_lat') }},
             {{$institution->longitude >0 ? $institution->longitude : config('leaflet.map_small_center_lon') }}];
         var map = L.map('mapid').setView( mapCenter,
-            {{ config('leaflet.zoom_level') }});
+            {{ config('leaflet.detail_zoom_level') }});
 
-        console.log (map);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -9,7 +9,7 @@
             <a href="{{ route('outlets.create') }}" class="btn btn-success">{{ __('outlet.create') }}</a>
         @endcan
     </div>
-    <h1 class="page-title">{{ __('outlet.list') }} <small>{{ __('app.total') }} : {{ $outlets->total() }} {{ __('outlet.outlet') }}</small></h1>
+    <h1 class="page-title">{{ __('outlet.list') }}</h1>
 </div>
 
 <div class="row">
@@ -41,7 +41,7 @@
                     <tr>
                         <td class="text-center">{{ $outlets->firstItem() + $key }}</td>
                         <td>{!! $outlet->name_link !!}</td>
-                        <td>{{ $outlet->address }}</td>
+                        <td>{{ $outlet->address_city }}, {{ $outlet->address_street }}</td>
                         <td>{{ $outlet->latitude }}</td>
                         <td>{{ $outlet->longitude }}</td>
                         <td class="text-center">
