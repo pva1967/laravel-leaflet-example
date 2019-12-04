@@ -42,3 +42,8 @@ Route::post('contacts_outlets/{outlet}/store', 'Cont2locController@store')->name
 
 Route::get('contacts_institution/edit', 'Cont2instController@edit')->name('contacts2institution.edit');
 Route::post('contacts_institution/store', 'Cont2instController@store')->name('contacts2institution.store');
+
+Route::get('import', 'DataController@import')->name('data.import');
+
+Route::get('export', 'DataController@export')->name('data.export');
+Route::get('export_m', 'DataController@export_m')->name('data.export_m');

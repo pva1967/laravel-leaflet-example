@@ -20,6 +20,14 @@
                     <div class="form-group" >
                         <label> Адрес:&nbsp; </label> <span id="ad_street">{{ $institution->address_street }}</span>
                     </div>
+                    <div class="form-group">
+                        <label for="location_type" class="control-label">{{ __('outlet.location_type') }}</label>
+                        <select name="venue_type">
+                            <option value="3,3" {{$institution->venue_type == '3,3'? 'selected':''}}>Университет, колледж</option>
+                            <option value="2,8" {{$institution->venue_type == '2,8'? 'selected':''}}>Исследовательский институт</option>
+                            <option value="7,3" {{$institution->venue_type == '7,3'? 'selected':''}}>Общежитие</option>
+                        </select>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-6">

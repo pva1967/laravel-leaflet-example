@@ -13,6 +13,9 @@
                     <label> Наименование:&nbsp; </label>{{ $institution->name_en }}
                 </div>
                 <div class="form-group" >
+                    <label> {{ __('outlet.location_type') }}:&nbsp; </label>{{ $institution->loc}}
+                </div>
+                <div class="form-group" >
                     <label> Город:&nbsp; </label> <span id="ad_city">{{ $institution->address_city }}</span>
                 </div>
                 <div class="form-group" >

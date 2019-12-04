@@ -61,7 +61,7 @@ class OutletPolicy
     }
     public function manage_outlet()
     {
-        // Update $user authorization to delete $outlet here.
-        return true;
+             return false;
+
     }
 }

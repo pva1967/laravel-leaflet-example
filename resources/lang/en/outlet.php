@@ -16,7 +16,7 @@ return [
     'back_to_index' => 'Back to Outlet List',
 
     // Actions
-    'create'         => 'Create new Outlet',
+    'create'         => 'Создать новую локацию',
     'created'        => 'A new Outlet has been created.',
     'show'           => 'Детали',
     'edit'           => 'Редактировать локацию',
@@ -30,7 +30,10 @@ return [
 
     // Attributes
     'name'       => 'Наименование',
-    'address'    => 'Outlet Address',
+    'AP_no'     => 'Количество точек доступа',
+    'address'    => 'Адрес',
+    'location_type' => 'Тип локации',
+    'info_URL'  =>'Информационная веб-страница',
     'address_city'    => 'Город',
     'address_street'    => 'Адрес',
     'latitude'   => 'Широта',

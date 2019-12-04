@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Outlet;
+use App\Institution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -62,8 +63,18 @@ class OutletController extends Controller
             'address_city'   => 'nullable|max:255',
             'latitude'  => 'nullable|required_with:longitude|max:15',
             'longitude' => 'nullable|required_with:latitude|max:15',
+            'AP_no' => 'integer',
+            'location_type' => 'required',
+            'info_URL' => 'nullable'
         ]);
+
         $newOutlet['creator_id'] = auth()->id();
+        $inst = Institution::where('creator_id', auth()->id())->firstOrFail();
+        $inst_id = $inst['inst_id'];
+        $count = strval(Outlet::where('creator_id', auth()->id())->count()+1);
+        $loc_id = $count>8? "{$inst_id}-{$count}":"{$inst_id}-0{$count}";
+
+        $newOutlet['location_id'] = $loc_id;
         $outlet = Outlet::create($newOutlet);
         return redirect()->route('outlets.show', $outlet);
     }
@@ -123,6 +134,9 @@ class OutletController extends Controller
             'address_city'   => 'nullable|max:255',
             'latitude'  => 'nullable|required_with:longitude|max:15',
             'longitude' => 'nullable|required_with:latitude|max:15',
+            'AP_no' => 'integer',
+            'location_type' => 'required',
+            'info_URL' => 'nullable'
         ]);
         $outlet->update($outletData);
 

@@ -11,6 +11,7 @@
         "laravel/passport": "^7.5",
         "laravel/tinker": "^1.0",
         "soapbox/laravel-formatter": "^3.1",
+        "spatie/array-to-xml": "^2.11",
         "toin0u/geocoder-laravel": "^4.2"
     },
     "require-dev": {

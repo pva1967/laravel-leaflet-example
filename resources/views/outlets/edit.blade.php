@@ -47,6 +47,24 @@
                         <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name', $outlet->name) }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
+                    <div class="form-group">
+                        <label for="AP_no" class="control-label">{{ __('outlet.AP_no') }}</label>
+                        <input id="AP_no" type="text" class="form-control{{ $errors->has('AP_no') ? ' is-invalid' : '' }}" name="AP_no" value="{{ old('AP_no', $outlet->AP_no) }}" required>
+                        {!! $errors->first('AP_no', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="AP_no" class="control-label">{{ __('outlet.info_URL') }}</label>
+                        <input id="info_URL" type="text" class="form-control{{ $errors->has('info_URL') ? ' is-invalid' : '' }}" name="info_URL" value="{{ old('info_URL', $outlet->info_URL) }}" required>
+                        {!! $errors->first('info_URL', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="location_type" class="control-label">{{ __('outlet.location_type') }}</label>
+                        <select name="location_type">
+                            <option value="3,3" {{$outlet->location_type == '3,3'? 'selected':''}}>Университет, колледж</option>
+                            <option value="2,8" {{$outlet->location_type == '2,8'? 'selected':''}}>Исследовательский институт</option>
+                            <option value="7,3" {{$outlet->location_type == '7,3'? 'selected':''}}>Общежитие</option>
+                        </select>
+                    </div>
                     <div class="form-group" >
                         <label> Город:&nbsp; </label> <span id="ad_city">{{ $outlet->address_city }}</span>
                     </div>

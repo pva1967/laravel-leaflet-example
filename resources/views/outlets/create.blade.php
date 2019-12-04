@@ -6,14 +6,32 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header">{{ __('outlets.create') }}</div>
+            <div class="card-header">{{ __('outlet.create') }}</div>
             <form method="POST" action="{{ route('outlets.store') }}" accept-charset="UTF-8">
                 {{ csrf_field() }}
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="name" class="control-label">{{ __('outlets.name') }}</label>
+                        <label for="name" class="control-label">{{ __('outlet.name') }}</label>
                         <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="AP_no" class="control-label">{{ __('outlet.AP_no') }}</label>
+                        <input id="AP_no" type="text" class="form-control{{ $errors->has('AP_no') ? ' is-invalid' : '' }}" name="AP_no" value="{{ 1, old('AP_no') }}" required>
+                        {!! $errors->first('AP_no', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="AP_no" class="control-label">{{ __('outlet.info_URL') }}</label>
+                        <input id="info_URL" type="text" class="form-control{{ $errors->has('info_URL') ? ' is-invalid' : '' }}" name="info_URL" value="{{ 'https://www.eduroam.ru', old('info_URL') }}" required>
+                        {!! $errors->first('info_URL', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="location_type" class="control-label">{{ __('outlet.location_type') }}</label>
+                        <select name="location_type">
+                            <option value="3,3">Университет, колледж</option>
+                            <option value="2,8">Исследовательский институт</option>
+                            <option value="7,3">Общежитие</option>
+                        </select>
                     </div>
                     <div class="form-group" >
                         <label> Город:&nbsp; </label> <span id="ad_city">{{ old('address_city') }}</span>
