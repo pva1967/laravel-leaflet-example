@@ -55,7 +55,7 @@ class DataController extends Controller
                     $lat=0; $lon=0;
                 }
 
-                $this->address($lat, $lon);
+                $this->address($lat, $lon, 'en');
                 //var_dump ($this->>address_city, $this->address_street);
                 /*Создаем юзера для института*/
                 $name=$inst_key;
