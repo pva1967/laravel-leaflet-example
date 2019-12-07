@@ -52,8 +52,8 @@
                     <a href="{{ route('institution.show') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
 
                 </div>
-                <input type="hidden" id="address_street" name="address_street" value=''>
-                <input type="hidden" id="address_city" name="address_city" value=''>
+                <input type="hidden" id="address_street" name="address_street" value='{{ $institution->address_street }}'>
+                <input type="hidden" id="address_city" name="address_city" value='{{ $institution->address_city }}'>
             </form>
         </div>
     </div>

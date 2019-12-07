@@ -19,8 +19,8 @@ class CreateOutletsTable extends Migration
             $table->string('location_id', 20);
             $table->unsignedInteger('AP_no')->default(1);
             $table->enum('location_type', ['3,3', '2,8', '7,3'])->default('3,3');
-            $table->string('address_street')->nullable();
-            $table->string('address_city')->nullable();
+            $table->string('address_street')->default('');
+            $table->string('address_city')->default('');
             $table->string('latitude', 15)->nullable();
             $table->string('longitude', 15)->nullable();
             $table->unsignedInteger('creator_id');

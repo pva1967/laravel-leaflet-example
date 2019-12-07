@@ -96,8 +96,8 @@
                         <a href="{{ route('outlets.edit', [$outlet, 'action' => 'delete']) }}" id="del-outlet-{{ $outlet->id }}" class="btn btn-danger float-right">{{ __('app.delete') }}</a>
                     @endcan
                 </div>
-                <input type="hidden" id="address_street" name="address_street" value=''>
-                <input type="hidden" id="address_city" name="address_city" value=''>
+                <input type="hidden" id="address_street" name="address_street" value='{{ $outlet->address_street }}'>
+                <input type="hidden" id="address_city" name="address_city" value='{{ $outlet->address_city }}'>
             </form>
         </div>
     </div>
