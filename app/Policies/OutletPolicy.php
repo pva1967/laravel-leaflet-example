@@ -44,6 +44,7 @@ class OutletPolicy
     public function update()
     {
         // Update $user authorization to update $outlet here.
+       // return true;
         return true;
     }
 

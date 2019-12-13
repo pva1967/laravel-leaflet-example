@@ -44,6 +44,16 @@ Route::get('contacts_institution/edit', 'Cont2instController@edit')->name('conta
 Route::post('contacts_institution/store', 'Cont2instController@store')->name('contacts2institution.store');
 
 Route::get('import', 'DataController@import')->name('data.import');
-
 Route::get('export', 'DataController@export')->name('data.export');
 Route::get('export_m', 'DataController@export_m')->name('data.export_m');
+
+Route::get('admin', 'AdminController@dashboard')->name('admin.dashboard');
+Route::get('admin/store', 'AdminController@store')->name('admin.store');
+Route::get('admin/user_create', 'AdminController@user_create')->name('admin.user_create');
+Route::post('admin/user_store', 'AdminController@user_store')->name('admin.user_store');
+Route::get('admin/name_create', 'AdminController@name_create')->name('admin.name_create');
+Route::post('admin/name_store', 'AdminController@name_store')->name('admin.name_store');
+Route::get('admin/inst_create', 'AdminController@inst_create')->name('admin.inst_create');
+Route::post('admin/inst_store', 'AdminController@inst_store')->name('admin.inst_store');
+Route::get('admin/realm_create', 'AdminController@realm_create')->name('admin.realm_create');
+Route::post('admin/realm_store', 'AdminController@realm_store')->name('admin.realm_store');

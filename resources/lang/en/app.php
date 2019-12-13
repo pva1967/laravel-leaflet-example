@@ -8,7 +8,8 @@ return [
     'show_detail_title' => 'View :name :type detail',
 
     // Actions
-    'show'           => 'View Detail',
+    'Logout'        =>  'Выйти',
+    'show'           => 'Детали',
     'edit'           => 'Edit',
     'delete'         => 'Удалить',
     'cancel'         => 'Отменить',

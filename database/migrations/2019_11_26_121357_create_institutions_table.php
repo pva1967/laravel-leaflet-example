@@ -16,17 +16,17 @@ class CreateInstitutionsTable extends Migration
         Schema::create('institutions', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('inst_id', 60);
-            $table->enum('inst_type', ['IdP', 'SP', 'IdP+SP']);
+            $table->string('inst_id', 60)->nullable();
+            $table->enum('inst_type', ['IdP', 'SP', 'IdP+SP'])->default('IdP+SP');
             $table->enum('venue_type', ['3,3', '2,8', '7,3'])->default('3,3');
-            $table->enum('inst_stage', ['0', '1']);
+            $table->enum('inst_stage', ['0', '1'])->default('1');
             /*key for inst_names*/
             $table->unsignedInteger('inst_name_id');
 
-            $table->string('address_street');
-            $table->string('address_city');
-            $table->string('latitude', 150);
-            $table->string('longitude', 150);
+            $table->string('address_street')->nullable();
+            $table->string('address_city')->nullable();
+            $table->string('latitude', 150)->nullable();
+            $table->string('longitude', 150)->nullable();
 
             $table->string('info_URL_en')->default('https://www.eduroam.ru');
             $table->string('info_URL_ru')->nullable();

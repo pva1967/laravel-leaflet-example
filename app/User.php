@@ -5,6 +5,7 @@ namespace App;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -28,4 +29,17 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    public function is_Admin()
+    {
+        $role= DB::table('roles')
+            ->where('user_id','=',$this->id)
+            ->select('roles.role as role')
+            ->first();
+        if (null !== $role) {
+            return $role->role == 'super_admin';
+        }
+        return false;
+    }
 }

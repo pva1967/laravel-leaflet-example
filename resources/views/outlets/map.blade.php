@@ -30,7 +30,7 @@
         }).addTo(map);
 
 
-       let url = '{{route('api.outlets.index')}}'.concat('?user_id=', '{{$user_id}}');
+       let url = '{{route('api.outlets.index')}}'.concat('?user_id=', '{{$user_id}}', '&isAdmin=', '{{$isAdmin}}');
        console.log("url: ", url);
         axios.get(url)
             .then(function (response) {

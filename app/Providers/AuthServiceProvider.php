@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -36,8 +37,8 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage_outlet', function () {
             return auth()->check();
         });
-        Gate::define('view-post', function () {
-            return auth()->check();
+        Gate::define('view-post', function ($post) {
+            return $post->creator_id == Auth::id();
         });
     }
 }

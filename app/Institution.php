@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,5 +32,14 @@ class Institution extends Model
         }
 
         return $venue;
+    }
+    public function name_ru()
+    {
+        $name_ru = DB::table('instnames')
+            ->where('id','=', $this->inst_name_id)
+            ->select('name_ru')
+            ->first();
+
+        return $name_ru->name_ru ?? '';
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use App\Outlet;
+use App\User;
 use App\Institution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Session;
 
 
 class OutletController extends Controller
@@ -19,18 +22,31 @@ class OutletController extends Controller
      */
     public function index()
     {
-        $this->authorize('manage_outlet');
+        $user = Auth::user();
+        if (null == $user ) {
+            return App::abort(404, 'Требуется авторизация');
+        }
+        if (!$user->is_Admin())
+        {
+            $this->authorize('manage_outlet');
+        }
+        else
+        {
+            $session = Session::get('SA_Inst_id');
+            if (null !== $session) {
+                $inst_id = $session;
+            } else {
+                $inst_id = Institution::first()->id;
+            }
+            $user = User::find(Institution::find(strval($inst_id))->creator_id);
+        }
 
-            // the user can do everything
-        $user_id=Auth::id();
-
+        $user_id=$user->id;
+       if($this->authorize('manage_outlet') or $user)
             $outletQuery = Outlet::query();
             $outletQuery->where('name', 'like', '%' . request('q') . '%')->where('creator_id', $user_id);
             $outlets = $outletQuery->paginate(25);
-//        $test = Auth::user()->name ;
-//        $contents = Storage::disk('public')->get($test.'.xml');
-//        $formatter = Formatter::make($contents, Formatter::XML);
-//        $contents = var_export($formatter->toArray());
+//
             return view('outlets.index', compact('outlets'));
 
     }
@@ -42,7 +58,15 @@ class OutletController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', new Outlet);
+        $user = Auth::user();
+        if (null == $user ) {
+            return App::abort(404, 'Требуется авторизация');
+        }
+        if (!$user->is_Admin())
+        {
+            $this->authorize('create', new Outlet);
+        }
+
 
         return view('outlets.create');
     }
@@ -55,7 +79,26 @@ class OutletController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', new Outlet);
+        $user = Auth::user();
+        if (null == $user ) {
+            return App::abort(404, 'Требуется авторизация');
+        }
+        if (!$user->is_Admin())
+        {
+            $this->authorize('create', new Outlet);
+        }
+        else
+        {
+            $session = Session::get('SA_Inst_id');
+            if (null !== $session) {
+                $inst_id = $session;
+            } else {
+                $inst_id = Institution::first()->id;
+            }
+            $user = User::find(Institution::find(strval($inst_id))->creator_id);
+        }
+
+        $user_id=$user->id;
 
         $newOutlet = $request->validate([
             'name'      => 'required|max:60',
@@ -68,10 +111,10 @@ class OutletController extends Controller
             'info_URL' => 'nullable'
         ]);
 
-        $newOutlet['creator_id'] = auth()->id();
-        $inst = Institution::where('creator_id', auth()->id())->firstOrFail();
+        $newOutlet['creator_id'] = $user_id;
+        $inst = Institution::where('creator_id', $user_id)->firstOrFail();
         $inst_id = $inst['inst_id'];
-        $count = strval(Outlet::where('creator_id', auth()->id())->count()+1);
+        $count = strval(Outlet::where('creator_id', $user_id)->count()+1);
         $loc_id = $count>8? "{$inst_id}-{$count}":"{$inst_id}-0{$count}";
 
         $newOutlet['location_id'] = $loc_id;
@@ -87,7 +130,19 @@ class OutletController extends Controller
      */
     public function show(Outlet $outlet)
     {
-        $user = Auth::user();
+        $user=Auth::user();
+        if (null == $user ) {
+            return App::abort(404, 'Требуется авторизация');
+        }
+        if ($user->is_Admin()) {
+            $session = Session::get('SA_Inst_id');
+            if (null !== $session) {
+                $inst_id = $session;
+            } else {
+                $inst_id = Institution::first()->id;
+            }
+            $user = User::find(Institution::find(strval($inst_id))->creator_id);
+        }
 
             $contacts=DB::table('contacts')
                ->join('cont2locs','cont2locs.cont_id' , '=' , 'contacts.id')
@@ -95,7 +150,7 @@ class OutletController extends Controller
                 ->select('contacts.*')->get();
 
         //dd($contacts);
-        if (Gate::forUser($user)->allows('view-post', $outlet))  {
+        if (Gate::forUser($user)->allows('view-post', $outlet) or $user->is_Admin())  {
             return view('outlets.show', compact('outlet', 'contacts'));
         }
         else {
@@ -112,7 +167,14 @@ class OutletController extends Controller
      */
     public function edit(Outlet $outlet)
     {
-        $this->authorize('update', $outlet);
+        $user=Auth::user();
+        if (null == $user ) {
+            return App::abort(404, 'Требуется авторизация');
+        }
+        if (!$user->is_Admin())
+        {
+            $this->authorize('update', $outlet);
+        }
         return view('outlets.edit', compact('outlet'));
     }
 
@@ -126,7 +188,14 @@ class OutletController extends Controller
      */
     public function update(Request $request, Outlet $outlet)
     {
-        $this->authorize('update', $outlet);
+        $user=Auth::user();
+        if (null == $user ) {
+            return App::abort(404, 'Требуется авторизация');
+        }
+        if (!$user->is_Admin())
+        {
+            $this->authorize('update', $outlet);
+        }
 
         $outletData = $request->validate([
             'name'      => 'required|max:60',
@@ -152,7 +221,14 @@ class OutletController extends Controller
      */
     public function destroy(Request $request, Outlet $outlet)
     {
-        $this->authorize('delete', $outlet);
+        $user=Auth::user();
+        if (null == $user ) {
+            return App::abort(404, 'Требуется авторизация');
+        }
+        if (!$user->is_Admin())
+        {
+            $this->authorize('update', $outlet);
+        };
 
         $request->validate(['outlet_id' => 'required']);
 
