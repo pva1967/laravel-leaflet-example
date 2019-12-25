@@ -19,7 +19,7 @@ class InstnamesTableSeeder extends Seeder
             ['name_en' => 'Tomsk Polytechnic University', 'name_ru' => 'Томский Политехнческий Университет '],
             ['name_en' => 'University MISIS', 'name_ru' => 'Университет МИСИС'],
             ['name_en' => 'Petrozavodsk State University', 'name_ru' => 'Петрозаводский государственный университет'],
-            ['name_en' => 'Самарский университет', 'name_ru' => 'Samara University'],
+            ['name_en' => 'Samara University', 'name_ru' => 'Самарский университет'],
             ['name_en' => 'ITMO University', 'name_ru' => 'Университет ИТМО'],
             ['name_en' => 'Joint Institute for Nuclear Research', 'name_ru' => 'ОИЯИ'],
             ['name_en' => 'DHI Moskau', 'name_ru' => 'Германский исторический институт'],
@@ -29,7 +29,7 @@ class InstnamesTableSeeder extends Seeder
             ['name_en'=>'Altai State Universty',	'name_ru'=>'Алтайский государственный университет'],
             ['name_en' => 'Ural Federal University', 'name_ru' => 'Уральский федеральный университет'],
             ['name_en' => 'South Ural State University ', 'name_ru' => 'Южно-Уральский государственный университет'],
-            ['name_en' => 'Institute for High Energy Physics', 'name_ru' => ' Институт физики высоких энергий'],
+            ['name_en' => 'Institute for High Energy Physics', 'name_ru' => 'Институт физики высоких энергий'],
             ['name_en' => 'Higher School of Economics', 'name_ru' => 'Высшая школа экономики']
 
 

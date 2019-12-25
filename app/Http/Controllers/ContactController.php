@@ -44,7 +44,7 @@ class ContactController extends Controller
     }
     public function create()
     {
-
+        $user = Auth::user();
        return view('contacts.create');
 
     }
@@ -120,6 +120,19 @@ class ContactController extends Controller
             return (redirect('/'));
         }
 
+    }
+
+    public function destroy(Request $request, Contact $contact)
+    {
+        $user=Auth::user();
+        if ($user->can('delete', $contact)) {
+            $request->validate(['contact_id' => 'required']);
+
+            if ($request->get('contact_id') == $contact->id && $contact->delete()) {
+                return redirect()->route('contacts.index');
+            }
+        }
+        return back();
     }
 
 }

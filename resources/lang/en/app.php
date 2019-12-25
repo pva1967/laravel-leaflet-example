@@ -13,7 +13,8 @@ return [
     'edit'           => 'Edit',
     'delete'         => 'Удалить',
     'cancel'         => 'Отменить',
-    'reset'          => 'Reset',
-    'delete_confirm' => 'Are you sure to delete this?',
-    'delete_confirm_button' => 'YES, delete it!',
+    'reset'          => 'Очистить',
+    'delete_confirm' => 'Вы уверены, что хотите удалить?',
+    'delete_confirm_button' => 'Да, удалить.',
+
 ];

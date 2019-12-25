@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use App\Contact;
 use App\Institution;
 use Illuminate\Http\Request;
@@ -14,6 +15,9 @@ class Cont2instController extends Controller
     public function edit()
     {
         $user=Auth::user();
+        if (null == $user) {
+            App::abort(403, 'Требуется авторизация');
+        }
         if ($user->is_Admin()) {
          $session = Session::get('SA_Inst_id');
             if (null !== $session) {
@@ -41,8 +45,10 @@ class Cont2instController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->input('contact'));
         $user=Auth::user();
+        if (null == $user) {
+            App::abort(403, 'Требуется авторизация');
+        }
         if ($user->is_Admin()) {
             $session = Session::get('SA_Inst_id');
             if (null !== $session) {
@@ -56,7 +62,7 @@ class Cont2instController extends Controller
             $user_id = $user->id;
         }
         $institution = DB::table('institutions')->where('creator_id', $user_id)->first();
-        dd($institution);
+        //dd($institution);
         $contacts= $request->input('contact');
         DB::delete('delete from cont2insts where inst_id ='.$institution->id);
         //dd($deleted);

@@ -2619,7 +2619,7 @@ textarea.form-control.is-valid {
 }
 
 .invalid-feedback {
-  display: none;
+  display: inline-block;
   width: 100%;
   margin-top: 0.25rem;
   font-size: 80%;

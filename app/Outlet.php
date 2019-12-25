@@ -81,5 +81,24 @@ class Outlet extends Model
         return $mapPopupContent;
     }
 
+    public function locType()
+    {
+        $venue ='';
+        switch($this->location_type)
+        {
+
+            case '3,3':
+                $venue = "Университет, колледж";
+                break;
+            case '2,8' :
+                $venue = "Исследовательский институт";
+                break;
+            case '7,3' :
+                $venue = "Общежитие";
+        }
+
+        return $venue;
+    }
+
 
 }

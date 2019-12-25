@@ -12,7 +12,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name" class="control-label">{{ __('outlet.name') }}</label>
-                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required>
+                        <input id="name" type="text" placeholder="{{ __('outlet.name_text') }}" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
                     <div class="form-group">
@@ -43,14 +43,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="latitude" class="control-label">{{ __('outlet.latitude') }}</label>
-                                <input id="latitude" type="text" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" name="latitude" value="{{ old('latitude') }}" required>
+                                <input id="latitude" type="text" placeholder="{{ __('outlet.address_text') }}" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" name="latitude" value="{{ old('latitude') }}" required>
                                 {!! $errors->first('latitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="longitude" class="control-label">{{ __('outlet.longitude') }}</label>
-                                <input id="longitude" type="text" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" name="longitude" value="{{ old('longitude') }}" required>
+                                <input id="longitude" type="text" placeholder="{{ __('outlet.address_text') }}" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" name="longitude" value="{{ old('longitude') }}" required>
                                 {!! $errors->first('longitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                             </div>
                         </div>
@@ -83,7 +83,15 @@
 @push('scripts')
 
 <script>
-    var mapCenter = [{{ request('latitude', config('leaflet.map_center_latitude')) }},{{ request('longitude', config('leaflet.map_center_longitude')) }}];
+    let old_lat= $('#latitude').val();
+    let old_lon= $('#longitude').val();
+
+    let lat = old_lat ? old_lat : "{{config('leaflet.map_center_latitude')}}";
+    let lon = old_lon ? old_lon : "{{config('leaflet.map_center_longitude')}}";
+
+    var mapCenter = [lat,lon];
+
+    console.log(mapCenter);
     var map = L.map('mapid').setView(mapCenter, {{ config('leaflet.zoom_level') }});
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

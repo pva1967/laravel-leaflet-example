@@ -21,7 +21,31 @@
                 <div class="form-group" >
                     <label> Адрес:&nbsp; </label> <span id="ad_street">{{ $institution->address_street }}</span>
                 </div>
-                <div class="form-group" >{{ __('outlet.contacts') }}<br>
+                <div class="form-group" >
+                    <label> {{ __('admin.info_URL_en') }}:&nbsp; </label> <span id="ad_street">{{ $institution->info_URL_en }}</span>
+                </div>
+                <div class="form-group" >
+                    <label> {{ __('admin.info_URL_ru') }}:&nbsp; </label> <span id="ad_street">{{ $institution->info_URL_ru }}</span>
+                </div>
+                <div class="form-group" >
+                    <label> {{ __('admin.policy_URL_en') }}:&nbsp; </label> <span id="ad_street">{{ $institution->policy_URL_en }}</span>
+                </div>
+                <div class="form-group" >
+                    <label> {{ __('admin.policy_URL_ru') }}:&nbsp; </label> <span id="ad_street">{{ $institution->policy_URL_ru }}</span>
+                </div>
+
+                @if (!empty($realms))
+                <div class="form-group" >
+                    <label>{{ __('institution.realms')}}</label><br>
+
+                        @foreach($realms as $key => $realm)
+                            {{$key+1}}.&nbsp;{{$realm->realm}}<br>
+                        @endforeach
+
+                </div>
+                @endif
+                <div class="form-group" >
+                    <label>{{ __('institution.contacts') }}</label><br>
                     @if (!empty($contacts))
                         @foreach($contacts as $key => $contact)
                             {{$key+1}}.&nbsp;{{$contact->name}}<br>

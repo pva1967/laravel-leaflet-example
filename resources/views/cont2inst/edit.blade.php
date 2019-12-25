@@ -6,7 +6,7 @@
     <div class="mb-3">
 
 
-        <h1 class="page-title">{{ __('contact.add2loc') }} </h1>
+        <h1 class="page-title">{{ __('contact.add2inst') }} </h1>
     </div>
 
     <div class="row">
@@ -40,7 +40,7 @@
                         @endforeach
                         </tbody>
                     </table>
-                    <input type="submit" value="{{ __('contact.add2loc') }}" class="btn btn-success">
+                    <input type="submit" value="{{ __('contact.add2inst') }}" class="btn btn-success">
                 </form>
             </div>
 

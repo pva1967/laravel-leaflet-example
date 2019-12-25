@@ -31,4 +31,14 @@ class ContactPolicy
 
         return $user->id == $contact->creator_id;
     }
+    public function delete(User $user, Contact $contact)
+    {
+        if ($user->is_Admin()) {
+            return true;
+        }
+        else {
+            return $contact->creator_id == $user->id;
+        }
+    }
+
 }

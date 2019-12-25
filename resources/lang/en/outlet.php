@@ -27,6 +27,8 @@ return [
     'deleted'        => 'Outlet has been deleted.',
     'undeleted'      => 'Outlet not deleted.',
     'undeleteable'   => 'Outlet data cannot be deleted.',
+    'name_text'     => 'Например, Главный корпус',
+    'address_text'  => 'Установите маркер на карте',
 
     // Attributes
     'name'       => 'Наименование',

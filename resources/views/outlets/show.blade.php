@@ -15,6 +15,12 @@
                         <tr><td>{{ __('outlet.address_street') }}</td><td>{{ $outlet->address_street }}</td></tr>
                         <tr><td>{{ __('outlet.latitude') }}</td><td>{{ $outlet->latitude }}</td></tr>
                         <tr><td>{{ __('outlet.longitude') }}</td><td>{{ $outlet->longitude }}</td></tr>
+                        <tr><td>{{ __('outlet.longitude') }}</td><td>{{ $outlet->longitude }}</td></tr>
+                        @if ($outlet->info_URL !== '' && !$outlet->info_URL)
+                            <tr><td>{{ __('outlet.info_URL') }}</td><td>{{ $outlet->info_URL }}</td></tr>
+                        @endif
+                        <tr><td>{{ __('outlet.AP_no') }}</td><td>{{ $outlet->AP_no }}</td></tr>
+                        <tr><td>{{ __('outlet.location_type') }}</td><td>{{ $outlet->locType() }}</td></tr>
                         <tr><td>{{ __('outlet.contacts') }}</td><td>
                                 @if (!empty($contacts))
                                     @foreach($contacts as $key => $contact)

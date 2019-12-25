@@ -5,6 +5,35 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-6">
+        @if (request('action') == 'delete' && $contact)
+            @can('delete', $contact)
+                <div class="card">
+                    <div class="card-header">{{ __('outlet.delete') }}</div>
+                    <div class="card-body">
+                        <div class="form-group" >
+                            <label class="control-label text-primary">{{ __('contact.name') }}</label>
+                            <p>{{ $contact->name }}</p>
+                        </div>
+                        <div class="form-group" >
+                            <label class="control-label text-primary">{{ __('contact.email') }}</label>
+                            <p>{{ $contact->email }}</p>
+                        </div>
+
+                        {!! $errors->first('contact_id', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+                    <hr style="margin:0">
+                    <div class="card-body text-danger">{{ __('contact.delete_confirm') }}</div>
+                    <div class="card-footer">
+                        <form method="POST" action="{{ route('contacts.destroy', $contact) }}" accept-charset="UTF-8" onsubmit="return confirm({{ __('app.delete_confirm') }})" class="del-form float-right" style="display: inline;">
+                            {{ csrf_field() }} {{ method_field('delete') }}
+                            <input name="contact_id" type="hidden" value="{{ $contact->id }}">
+                            <button type="submit" class="btn btn-danger">{{ __('app.delete_confirm_button') }}</button>
+                        </form>
+                        <a href="{{ route('contacts.edit', $contact) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    </div>
+                </div>
+            @endcan
+        @else
         <div class="card">
             <div class="card-header">{{ __('contact.edit') }}</div>
             <form method="POST" action="{{ route('contacts.update') }}" accept-charset="UTF-8" id="contact_create">
@@ -46,6 +75,9 @@
 
                      <input type="submit" value="{{ __('contact.update')}}" class="btn btn-success">
                         <a href="{{ route('contacts.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @can('delete', $contact)
+                        <a href="{{ route('contacts.edit', [$contact, 'action' => 'delete']) }}" id="del-contact-{{ $contact->id }}" class="btn btn-danger float-right">{{ __('app.delete') }}</a>
+                    @endcan
                 </div>
                     <input type = "hidden" value="update" name="rules_type">
                     <input type = "hidden" value="{{$contact->id}}" name="update_id">
@@ -54,6 +86,7 @@
         </div>
     </div>
 </div>
+        @endif
 @endsection
 
 

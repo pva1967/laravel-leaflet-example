@@ -2,17 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use App\Contact;
+use App\Institution;
 use App\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Cont2locController extends Controller
 {
     public function edit(Outlet $outlet)
     {
-        $user_id=Auth::id();
+
+        $user=Auth::user();
+
+        if (null == $user) {
+            App::abort(403, 'Требуется авторизация');
+        }
+        $this->authorize('view_post', $outlet);
+        if ($user->is_Admin()) {
+            $session = Session::get('SA_Inst_id');
+            if (null !== $session) {
+                $inst_id = $session;
+            } else {
+                $inst_id = Institution::first()->id;
+            }
+            $user_id = Institution::find(strval($inst_id))->creator_id;
+        }
+        else {
+            $user_id = $user->id;
+        }
 
         $contactQuery = Contact::query();
         $contactQuery->where('creator_id', $user_id);

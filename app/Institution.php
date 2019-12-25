@@ -33,7 +33,7 @@ class Institution extends Model
 
         return $venue;
     }
-    public function name_ru()
+    public function getNameRuAttribute()
     {
         $name_ru = DB::table('instnames')
             ->where('id','=', $this->inst_name_id)

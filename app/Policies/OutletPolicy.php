@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Policies;
+use App\Outlet;
+use App\User;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -62,7 +64,17 @@ class OutletPolicy
     }
     public function manage_outlet()
     {
-             return false;
+             return true;
+
+    }
+    public function view_post (User $user, Outlet $outlet)
+    {
+        if ($user->is_Admin()) {
+            return true;
+        }
+        else {
+            return $outlet->creator_id == $user->id;
+        }
 
     }
 }

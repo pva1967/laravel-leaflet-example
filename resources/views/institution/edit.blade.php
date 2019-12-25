@@ -3,6 +3,7 @@
 @section('title', __('institution.edit'))
 
 @section('content')
+
 <div class="row justify-content-center">
     <div class="col-md-6">
 
@@ -30,28 +31,24 @@
                     </div>
                     <div class="form-group">
                         <label for="info_URL_en" class="control-label" style="width: 250px;">{{ __('admin.info_URL_en') }}</label>
-                        <input id="info_URL_en" type="text" name="info_URL_en" value="{{ old('info_URL_en', "http://www.eduroam.ru/") }}" required  style="width: 250px;">
-                        @if ($errors->has('info_URL_en'))
-                            <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('info_URL_en') }}</strong>
-                                    </span>
-                        @endif
+                        <input id="info_URL_en" type="text" name="info_URL_en" value="{{ old('info_URL_en', $institution->info_URL_en, "http://www.eduroam.ru/") }}" required  style="width: 250px;">
+                        {!! $errors->first('info_URL_en', '<span class="invalid-feedback" role="alert">Неверный формат URL</span>') !!}
 
                     </div>
                     <div class="form-group">
                         <label for="info_URL_ru" class="control-label" style="width: 250px;">{{ __('admin.info_URL_ru') }}</label>
-                        <input id="info_URL_ru" type="text" name="info_URL_ru" value="{{ old('info_URL_ru',"http://www.eduroam.ru/") }}" required  style="width: 250px;">
-                        {!! $errors->first('info_URL_ru', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                        <input id="info_URL_ru" type="text" name="info_URL_ru" value="{{ old('info_URL_ru', $institution->info_URL_ru,"http://www.eduroam.ru/") }}"   style="width: 250px;">
+                        {!! $errors->first('info_URL_ru', '<span class="invalid-feedback" role="alert">Неверный формат URL</span>') !!}
                     </div>
                     <div class="form-group">
                         <label for="policy_URL_en" class="control-label" style="width: 250px;">{{ __('admin.policy_URL_en') }}</label>
-                        <input id="policy_URL_en" type="text" name="policy_URL_en" value="{{ old('info_URL_en', "http://www.eduroam.ru/") }}" required  style="width: 250px;">
-                        {!! $errors->first('policy_URL_en', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                        <input id="policy_URL_en" type="text" name="policy_URL_en" value="{{ old('policy_URL_en', $institution->policy_URL_en, "http://www.eduroam.ru/")}}" required  style="width: 250px;">
+                        {!! $errors->first('policy_URL_en', '<span class="invalid-feedback" role="alert">Неверный формат URL</span>') !!}
                     </div>
                     <div class="form-group">
                         <label for="policy_URL_ru" class="control-label" style="width: 250px;">{{ __('admin.policy_URL_ru') }}</label>
-                        <input id="policy_URL_ru" type="text" name="policy_URL_ru" value="{{ old('policy_URL_ru', "http://www.eduroam.ru/") }}" required  style="width: 250px;">
-                        {!! $errors->first('policy_URL_ru', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                        <input id="policy_URL_ru" type="text" name="policy_URL_ru" value="{{ old('policy_URL_ru', $institution->policy_URL_ru, "http://www.eduroam.ru/")}}"   style="width: 250px;">
+                        {!! $errors->first('policy_URL_ru', '<span class="invalid-feedback" role="alert">Неверный формат URL</span>') !!}
                     </div>
 
                     <div class="row">

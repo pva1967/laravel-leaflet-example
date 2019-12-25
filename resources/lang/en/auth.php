@@ -13,7 +13,17 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
+    'failed' => 'Введены неверные учетные данные',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'Password'      => 'Пароль',
+    'Remember Me' => 'Запомнить меня',
+    'Forgot Your Password?' => 'Забыли пароль?',
+    'Login' => 'Войти',
+    'Generate' => 'Сгененировать пароль',
+    'Reset' => 'Установить новый пароль',
+    'Confirm Password' => 'Подтвердите пароль',
+    'Reset Password' => 'Установить пароль',
+    'Send Password Reset Link' => 'Выслать ссылку для сброса (установки) пароля',
+    'Reset Password' => 'Установка (сброс) пароля',
 
 ];
