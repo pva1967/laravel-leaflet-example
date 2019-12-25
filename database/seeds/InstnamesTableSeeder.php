@@ -16,7 +16,7 @@ class InstnamesTableSeeder extends Seeder
         DB::table('instnames')->insert([
             ['name_en' => 'JSCC RAS', 'name_ru' => 'МСЦ РАН'],
             ['name_en' => 'SPbD JSCC RAS', 'name_ru' => 'СПбО МСЦ РАН'],
-            ['name_en' => 'Tomsk Polytechnic University', 'name_ru' => 'Томский Политехнческий Университет '],
+            ['name_en' => 'Tomsk Polytechnic University', 'name_ru' => 'Томский политехнческий университет '],
             ['name_en' => 'University MISIS', 'name_ru' => 'Университет МИСИС'],
             ['name_en' => 'Petrozavodsk State University', 'name_ru' => 'Петрозаводский государственный университет'],
             ['name_en' => 'Samara University', 'name_ru' => 'Самарский университет'],
