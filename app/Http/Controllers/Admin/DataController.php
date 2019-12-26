@@ -347,7 +347,6 @@ class DataController extends Controller
 
         // decode the json
         $res = json_decode($resp_json, true);
-        dd($res);
         $this->address_city = '';
         $this->address_street = '';
         $address_route =''; $address_number ='';

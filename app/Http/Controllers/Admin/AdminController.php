@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
 
 use App;
 use App\Institution;
@@ -9,12 +10,10 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Dirape\Token\Token;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Password;
-
+use App\Http\Controllers\Controller;
 
 
 class AdminController extends Controller
