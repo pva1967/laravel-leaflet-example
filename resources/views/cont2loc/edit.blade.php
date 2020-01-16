@@ -12,7 +12,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
+                @if (Request::is('admin/*'))
+                <form method="POST" action="{{ route('admin.cont2outlets.store', $outlet) }}" accept-charset="UTF-8">
+                @else
                 <form method="POST" action="{{ route('cont2outlets.store', $outlet) }}" accept-charset="UTF-8">
+                @endif
                     {{ csrf_field() }}
                 <table class="table table-sm table-responsive-sm">
                     <thead>

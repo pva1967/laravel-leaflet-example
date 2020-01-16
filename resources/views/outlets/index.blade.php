@@ -5,9 +5,11 @@
 @section('content')
 <div class="mb-3">
     <div class="float-right">
-        @can('create', new App\Outlet)
+        @if (Request::is('admin/*'))
+        <a href="{{ route('admin.outlets.create') }}" class="btn btn-success">{{ __('outlet.create') }}</a>
+        @else
             <a href="{{ route('outlets.create') }}" class="btn btn-success">{{ __('outlet.create') }}</a>
-        @endcan
+        @endif
     </div>
     <h1 class="page-title">{{ __('outlet.list') }}</h1>
 </div>
@@ -33,20 +35,18 @@
                         <th>{{ __('outlet.address') }}</th>
                         <th>{{ __('outlet.latitude') }}</th>
                         <th>{{ __('outlet.longitude') }}</th>
-                        <th class="text-center">{{ __('app.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($outlets as $key => $outlet)
                     <tr>
                         <td class="text-center">{{ $outlets->firstItem() + $key }}</td>
-                        <td>{!! $outlet->name_link !!}</td>
+                        @if (Request::is('admin/*')) <td>{!! $outlet->admin_link !!}</td>
+                        @else <td>{!! $outlet->name_link !!}</td>
+                        @endif
                         <td>{{ $outlet->address_city }}, {{ $outlet->address_street }}</td>
                         <td>{{ $outlet->latitude }}</td>
                         <td>{{ $outlet->longitude }}</td>
-                        <td class="text-center">
-                            <a href="{{ route('outlets.show', $outlet) }}" id="show-outlet-{{ $outlet->id }}">{{ __('app.show') }}</a>
-                        </td>
                     </tr>
                     @endforeach
                 </tbody>

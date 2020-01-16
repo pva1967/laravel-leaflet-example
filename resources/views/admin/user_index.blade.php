@@ -50,7 +50,7 @@
                         <td>{{ $admin->instname }}</td>
 
                            <td class="text-center">
-                               <form method="POST" action="{{ route('admin.password_reset') }}">
+                               <form method="POST" action="{{ route('admin.password.send') }}">
                                    @csrf
                                <input id="user_id" type="hidden" name="user_id" value="{{$admin->user_id}}" >
                                <button type="submit" class="btn btn-primary">

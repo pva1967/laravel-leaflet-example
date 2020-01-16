@@ -7,7 +7,13 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">{{ __('contact.create') }}</div>
-            <form method="POST" action="{{ route('contacts.store') }}" accept-charset="UTF-8" id="contact_create">
+            @if (Request::is('admin/*'))
+                <form method="POST" action="{{ route('admin.contacts.store') }}" accept-charset="UTF-8" id="contact_create">
+             @else
+                <form method="POST" action="{{ route('contacts.store') }}" accept-charset="UTF-8" id="contact_create">
+             @endif
+
+
                 {{ csrf_field() }}
                 <div class="card-body">
                     <div class="form-group">
@@ -47,7 +53,8 @@
                     <a href="{{ route('contacts.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
                 </div>
                 <input type = "hidden" value="create" name="rules_type">
-            </form>
+                 </form>
+            </div>
         </div>
     </div>
 </div>

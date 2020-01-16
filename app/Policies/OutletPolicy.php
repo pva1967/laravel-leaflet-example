@@ -17,7 +17,7 @@ class OutletPolicy
      * @param \App\Outlet $outlet
      * @return mixed
      */
-    public function view()
+    public function show()
     {
         // Update $user authorization to view $outlet here.
         return true;
@@ -30,10 +30,10 @@ class OutletPolicy
      * @param \App\Outlet $outlet
      * @return mixed
      */
-    public function create()
+    public function edit(User $user, Outlet $outlet)
     {
         // Update $user authorization to create $outlet here.
-        return true;
+        return $outlet->creator_id == $user->id;
     }
 
     /**

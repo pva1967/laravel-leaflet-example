@@ -14,6 +14,13 @@ class Outlet extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->loc_id,
+            'name' => $this->name,
+            'address_city' => $this->address_city,
+            'address_street' => $this->address_street,
+            'map_popup_content' => $this->map_popup_content,
+            'map_admin_popup_content' => $this->map_admin_popup_content,
+        ];
     }
 }

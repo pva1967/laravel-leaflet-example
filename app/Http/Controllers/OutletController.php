@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Outlet;
-use App\User;
 use App\Institution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Session;
 
 
 class OutletController extends Controller
@@ -23,23 +20,32 @@ class OutletController extends Controller
     public function index()
     {
 
-        $user = Auth::user();
+        $user=Auth::user();
+        $admin = Auth::guard('admin')->user();
+        if ($admin)
+        {
+            $session = session('SA_Inst_id');
 
-        if (null == $user)  {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        elseif ($user->is_Admin()) {
-
-            $session = Session::get('SA_Inst_id');
-            if (null !== $session) {
-                $inst_id = $session;
-            } else {
-                $inst_id = Institution::first()->id;
+            if (null !== $session)
+            {
+                $institution = Institution::find (strval($session));
             }
-            $user = User::find(Institution::find(strval($inst_id))->creator_id);
+            else
+            {
+                $institution = Institution::get()->sortBy('name_ru')->first();
+            }
+          $user_id = $institution->creator_id;
+        }
+        elseif (null!==$user )
+        {
+
+            $user_id = Auth::id();
         }
 
-            $user_id = $user->id;
+        else
+        {
+            App::abort(500, 'Нет данных об организации');
+        }
             $outletQuery = Outlet::query();
             $outletQuery->where('name', 'like', '%' . request('q') . '%')->where('creator_id', $user_id);
             $outlets = $outletQuery->paginate(25);
@@ -56,9 +62,18 @@ class OutletController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
+        $user=Auth::user();
+        $admin = Auth::guard('admin')->user();
 
-        return view('outlets.create');
+        if (null !== $user  or null !== $admin) {
+
+            return view('outlets.create');
+        }
+        else {
+            return App::abort(403, 'Требуется авторизация');
+        }
+
+
     }
 
     /**
@@ -69,26 +84,32 @@ class OutletController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
-        if (null == $user ) {
-            return App::abort(404, 'Требуется авторизация');
-        }
-        if (!$user->is_Admin())
+        $user=Auth::user();
+        $admin = Auth::guard('admin')->user();
+        if ($admin)
         {
-            $this->authorize('create', new Outlet);
-        }
-        else
-        {
-            $session = Session::get('SA_Inst_id');
-            if (null !== $session) {
-                $inst_id = $session;
-            } else {
-                $inst_id = Institution::first()->id;
+            $session = session('SA_Inst_id');
+
+            if (null !== $session)
+            {
+                $user_id = Institution::find (strval($session))->creator_id;
+                // dd($institution);
             }
-            $user = User::find(Institution::find(strval($inst_id))->creator_id);
+            else {
+                $user_id = Institution::get()->sortBy('name_ru')->first()->creator_id;
+            }
+        }
+        elseif (null!==$user )
+        {
+
+            $user_id = Auth::id();
         }
 
-        $user_id=$user->id;
+        else
+        {
+            App::abort(500, 'Нет данных об организации');
+        }
+
 
         $newOutlet = $request->validate([
             'name'      => 'required|max:60',
@@ -98,7 +119,7 @@ class OutletController extends Controller
             'longitude' => 'nullable|required_with:latitude|max:15',
             'AP_no' => 'integer',
             'location_type' => 'required',
-            'info_URL' => 'nullable|regex:/^(https?\:\/\/)?([a-zA-Z0-9_*]+\.)+[a-zA-Z0-9_*]+(\/[a-zA-Z0-9_*]+)*(\/)?$/'
+            'info_URL' => 'nullable|url'
         ]);
 
         $newOutlet['creator_id'] = $user_id;
@@ -109,7 +130,13 @@ class OutletController extends Controller
 
         $newOutlet['location_id'] = $loc_id;
         $outlet = Outlet::create($newOutlet);
-        return redirect()->route('outlets.show', $outlet);
+
+        if ($admin){
+            return redirect()->route('admin.outlets.show', $outlet);
+        }
+        else {
+            return redirect()->route('outlets.show', $outlet);
+        }
     }
 
     /**
@@ -121,22 +148,19 @@ class OutletController extends Controller
     public function show(Outlet $outlet)
     {
         $user=Auth::user();
-        $contacts=DB::table('contacts')
-               ->join('cont2locs','cont2locs.cont_id' , '=' , 'contacts.id')
+        $admin = Auth::guard('admin')->user();
+        if ((null !== $user && $user->can('edit', $outlet)) or (null !== $admin)) {
+
+            $contacts = DB::table('contacts')
+                ->join('cont2locs', 'cont2locs.cont_id', '=', 'contacts.id')
                 ->where('cont2locs.loc_id', '=', $outlet->id)
                 ->select('contacts.*')->get();
 
-        $this->authorize('view_post', $outlet);
-        return view('outlets.show', compact('outlet', 'contacts'));
-
-        /*if ($user->can('view_post', $outlet)) {
-
-             return view('outlets.show', compact('outlet', 'contacts'));
+            return view('outlets.show', compact('outlet', 'contacts'));
         }
-
         else {
-            return (redirect('/'));
-        }*/
+        return App::abort(403, 'Требуется авторизация');
+        }
 
     }
 
@@ -149,12 +173,15 @@ class OutletController extends Controller
     public function edit(Outlet $outlet)
     {
         $user=Auth::user();
-        if ($user->can('view_post', $outlet)) {
+        $admin = Auth::guard('admin')->user();
+
+
+        if ((null !== $user && $user->can('edit', $outlet)) or (null !== $admin)) {
             return view('outlets.edit', compact('outlet'));
         }
 
         else {
-            return (redirect('/'));
+            return App::abort(403, 'Требуется авторизация');
         }
     }
 
@@ -166,10 +193,13 @@ class OutletController extends Controller
      * @param  \App\Outlet  $outlet
      * @return \Illuminate\Routing\Redirector
      */
-    public function update(Request $request, Outlet $outlet)
+    public function update(Outlet $outlet, Request $request)
     {
         $user=Auth::user();
-        if ($user->can('view_post', $outlet)) {
+        $admin = Auth::guard('admin')->user();
+
+
+        if ((null !== $user && $user->can('edit', $outlet)) or (null !== $admin)) {
 
             $outletData = $request->validate([
                 'name' => 'required|max:60',
@@ -179,14 +209,19 @@ class OutletController extends Controller
                 'longitude' => 'nullable|required_with:latitude|max:15',
                 'AP_no' => 'integer',
                 'location_type' => 'required',
-                'info_URL' => 'nullable|regex:/^(https?\:\/\/)?([a-zA-Z0-9_*]+\.)+[a-zA-Z0-9_*]+(\/[a-zA-Z0-9_*]+)*(\/)?$/'
+                'info_URL' => 'nullable|url'
             ]);
             $outlet->update($outletData);
 
-            return redirect()->route('outlets.show', $outlet);
+            if ($admin){
+                return redirect()->route('admin.outlets.show', $outlet);
+            }
+           else {
+               return redirect()->route('outlets.show', $outlet);
+           }
         }
         else {
-            return (redirect('/'));
+            return App::abort(403, 'Требуется авторизация');
         }
     }
 
@@ -199,14 +234,19 @@ class OutletController extends Controller
      */
     public function destroy(Request $request, Outlet $outlet)
     {
-        $user=Auth::user();
-        if ($user->can('view_post', $outlet)) {
-            $request->validate(['outlet_id' => 'required']);
+        $user = Auth::user();
+        $admin = Auth::guard('admin')->user();
 
-            if ($request->get('outlet_id') == $outlet->id && $outlet->delete()) {
-                return redirect()->route('outlets.index');
-            }
+
+        if ((null !== $user && $user->can('edit', $outlet)) or (null !== $admin)) {
+
+            $outlet->delete();
+            $ins = $admin ? 'admin.':'';
+            return redirect()->route("{$ins}outlets.index");
         }
-        return back();
+        else {
+            return App::abort(403, 'Требуется авторизация');
+        }
+
     }
 }

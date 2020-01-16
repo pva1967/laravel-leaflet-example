@@ -5,8 +5,12 @@
 @section('content')
 <div class="mb-3">
     <div class="float-right">
-
+        @if (Request::is('admin/*'))
+            <a href="{{ route('admin.contacts.create') }}" class="btn btn-success">{{ __('contact.create') }}</a>
+        @else
             <a href="{{ route('contacts.create') }}" class="btn btn-success">{{ __('contact.create') }}</a>
+        @endif
+
 
     </div>
 
@@ -31,7 +35,9 @@
                     @foreach($contacts as $key => $contact)
                     <tr>
                         <td class="text-center">{{ $contacts->firstItem() + $key }}</td>
-                        <td>{!! $contact->name_link !!}</td>
+                        @if (Request::is('admin/*')) <td>{!! $contact->admin_link !!}</td>
+                        @else <td>{!! $contact->name_link !!}</td>
+                        @endif
                         <td>{{ $contact->email }}</td>
                         <td>{{ $contact->phone }}</td>
                         <td>{{ $contact->language_name}}</td>

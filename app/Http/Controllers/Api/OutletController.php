@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Outlet;
-use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Outlet as OutletResource;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class OutletController extends Controller
 {
@@ -20,7 +17,7 @@ class OutletController extends Controller
      * @return Illuminate\Http\JsonResponse
      */
 
-    public function index(Request $request)
+    public function index()
     {
 
         $user_id =  $_GET['user_id'];
@@ -33,11 +30,6 @@ class OutletController extends Controller
             $outlets = Outlet::where('creator_id', $user_id)->get();
         }
 
-        /*$user=Auth::user();
-         $outlets = DB::table('outlets')->get();
-        $outlets = Outlet::all();
-        $outletQuery = Outlet::query();
-        $outlets = Outlet::where('creator_id', $user->id)->get();*/
         $geoJSONdata = $outlets->map(function ($outlet) {
             return [
                 'type'       => 'Feature',
@@ -52,10 +44,8 @@ class OutletController extends Controller
                 ],
             ];
         });
-
         return response()->json([
             'type'     => 'FeatureCollection',
-            //'auth_userid' => $user_id,
             'features' => $geoJSONdata,
         ]);
     }

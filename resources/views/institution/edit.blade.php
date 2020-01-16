@@ -9,7 +9,11 @@
 
         <div class="card">
             <div class="card-header">{{ __('institution.edit') }}</div>
-            <form method="POST" action="{{ route('institution.store') }}" accept-charset="UTF-8">
+            @if (Request::is('admin/*'))
+                <form method="POST" action="{{ route('admin.institution.store') }}" accept-charset="UTF-8">
+            @else
+                <form method="POST" action="{{ route('institution.store') }}" accept-charset="UTF-8">
+            @endif
                 {{ csrf_field() }}
                 <div class="card-body">
                     <div class="form-group" >
@@ -71,12 +75,15 @@
                 </div>
                 <div class="card-footer">
                     <input type="submit" value="{{ __('institution.update') }}" class="btn btn-success">
-                    <a href="{{ route('institution.show') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @if (Request::is('admin/*')) <a href="{{ route('admin.institution.show') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @else <a href="{{ route('institution.show') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @endif
 
                 </div>
                 <input type="hidden" id="address_street" name="address_street" value='{{ $institution->address_street }}'>
                 <input type="hidden" id="address_city" name="address_city" value='{{ $institution->address_city }}'>
             </form>
+            </div>
         </div>
     </div>
 </div>

@@ -15,8 +15,7 @@
                         <tr><td>{{ __('outlet.address_street') }}</td><td>{{ $outlet->address_street }}</td></tr>
                         <tr><td>{{ __('outlet.latitude') }}</td><td>{{ $outlet->latitude }}</td></tr>
                         <tr><td>{{ __('outlet.longitude') }}</td><td>{{ $outlet->longitude }}</td></tr>
-                        <tr><td>{{ __('outlet.longitude') }}</td><td>{{ $outlet->longitude }}</td></tr>
-                        @if ($outlet->info_URL !== '' && !$outlet->info_URL)
+                        @if ($outlet->info_URL)
                             <tr><td>{{ __('outlet.info_URL') }}</td><td>{{ $outlet->info_URL }}</td></tr>
                         @endif
                         <tr><td>{{ __('outlet.AP_no') }}</td><td>{{ $outlet->AP_no }}</td></tr>
@@ -32,11 +31,15 @@
                 </table>
             </div>
             <div class="card-footer">
-                @can('update', $outlet)
+                @if (Request::is('admin/*'))
+                    <a href="{{ route('admin.outlets.edit', $outlet) }}" id="edit-outlet-{{ $outlet->id }}" class="btn btn-warning">{{ __('outlet.edit') }}</a>
+                    <a href="{{ route('admin.cont2outlets.edit', $outlet ) }}" id="edit-outlet-{{ $outlet->id }}" class="btn btn-warning">{{ __('contact.add_contacts') }}</a>
+                    <a href="{{ route('admin.outlets.index') }}" class="btn btn-link">{{ __('outlet.back_to_index') }}</a>
+                @else
                     <a href="{{ route('outlets.edit', $outlet) }}" id="edit-outlet-{{ $outlet->id }}" class="btn btn-warning">{{ __('outlet.edit') }}</a>
-                @endcan
                     <a href="{{ route('cont2outlets.edit', $outlet ) }}" id="edit-outlet-{{ $outlet->id }}" class="btn btn-warning">{{ __('contact.add_contacts') }}</a>
-                <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('outlet.back_to_index') }}</a>
+                    <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('outlet.back_to_index') }}</a>
+                @endif
             </div>
         </div>
     </div>

@@ -7,7 +7,11 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">{{ __('outlet.create') }}</div>
+            @if (Request::is('admin/*'))
+            <div method="POST" action="{{ route('admin.outlets.store') }}" accept-charset="UTF-8">
+            @else
             <form method="POST" action="{{ route('outlets.store') }}" accept-charset="UTF-8">
+            @endif
                 {{ csrf_field() }}
                 <div class="card-body">
                     <div class="form-group">
@@ -60,11 +64,16 @@
 
                 <div class="card-footer">
                     <input type="submit" value="{{ __('outlet.create') }}" class="btn btn-success">
+                    @if (Request::is('admin/*'))
+                    <a href="{{ route('admin.outlets.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @else
                     <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @endif
                 </div>
                 <input type="hidden" id="address_street" name="address_street" value=''>
                 <input type="hidden" id="address_city" name="address_city" value=''>
             </form>
+            </div>
         </div>
     </div>
 </div>

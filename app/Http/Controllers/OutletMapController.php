@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Outlet;
-use App\User;
-use Illuminate\Http\Request;
+use App;
 use Illuminate\Support\Facades\Auth;
 
 class OutletMapController extends Controller
@@ -15,18 +13,18 @@ class OutletMapController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
-        $user_id = Auth::id();
-        $user = User::find($user_id);
-        if (null !== $user) {
-            $isAdmin = $user->is_Admin() ? 1 : 0;
-        }
-        else {
-            $isAdmin = 0;
-        }
 
-        if (Auth::check()) {
+        $user=Auth::user();
+        $admin = Auth::guard('admin')->user();
+
+        $isAdmin = $admin ? 1:0;
+        $user_id = $user ? $user->id : null;
+
+
+        if (null!=$user or null != $admin) {
+
             return view('outlets.map', compact('user_id', 'isAdmin'));
         }
        else {

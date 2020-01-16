@@ -17,6 +17,7 @@
                                     <option value="{{$instname->id}}" >{{$instname->name_ru}}</option>
                                 @endforeach
                             </select>
+                            {!! $errors->first('inst_name', '<span class="invalid-feedback" role="alert">Организация с этим названием уже есть</span>') !!}
                         </div>
                         <div class="form-group">
                             <label for="user" class="control-label" style="width: 250px;">{{ __('admin.user') }}</label>
@@ -42,7 +43,7 @@
                         </div>
                         <div class="form-group">
                             <label for="info_URL_ru" class="control-label" style="width: 250px;">{{ __('admin.info_URL_ru') }}</label>
-                            <input id="info_URL_ru" type="text" name="info_URL_ru" value="{{ old('info_URL_ru',"http://www.eduroam.ru/") }}" required  style="width: 250px;">
+                            <input id="info_URL_ru" type="text" name="info_URL_ru" value="{{ old('info_URL_ru',"http://www.eduroam.ru/") }}"  style="width: 250px;">
                             {!! $errors->first('info_URL_ru', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                         </div>
                         <div class="form-group">
@@ -52,7 +53,7 @@
                         </div>
                         <div class="form-group">
                             <label for="policy_URL_ru" class="control-label" style="width: 250px;">{{ __('admin.policy_URL_ru') }}</label>
-                            <input id="info_URL_ru" type="text" name="info_URL_ru" value="{{ old('policy_URL_ru', "http://www.eduroam.ru/") }}" required  style="width: 250px;">
+                            <input id="info_URL_ru" type="text" name="info_URL_ru" value="{{ old('policy_URL_ru', "http://www.eduroam.ru/") }}"  style="width: 250px;">
                             {!! $errors->first('policy_URL_ru', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                         </div>
 

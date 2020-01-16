@@ -42,6 +42,19 @@ class Outlet extends Model
         return $link;
     }
 
+    public function getAdminLinkAttribute()
+    {
+        $title = __('app.show_detail_title', [
+            'name' => $this->name, 'type' => __('outlet.outlet'),
+        ]);
+        $link = '<a href="'.route('admin.outlets.show', $this).'"';
+        $link .= ' title="'.$title.'">';
+        $link .= $this->name;
+        $link .= '</a>';
+        $adminLink = $link;
+        return $adminLink;
+    }
+
     /**
      * Outlet belongs to User model relation.
      *
@@ -76,9 +89,17 @@ class Outlet extends Model
     {
         $mapPopupContent = '';
         $mapPopupContent .= '<div class="my-2"><strong>'.__('outlet.name').':</strong><br>'.$this->name_link.'</div>';
-        $mapPopupContent .= '<div class="my-2"><strong>'.__('outlet.address').':</strong><br>'.$this->address.'</div>';
+        $mapPopupContent .= '<div class="my-2"><strong>'.__('outlet.address').':</strong><br>'.$this->address_city.', '.$this->address_street.'</div>';
 
         return $mapPopupContent;
+    }
+    public function getMapAdminPopupContentAttribute()
+    {
+        $mapPopupContent = '';
+        $mapPopupContent .= '<div class="my-2"><strong>'.__('outlet.name').':</strong><br>'.$this->admin_link.'</div>';
+        $mapPopupContent .= '<div class="my-2"><strong>'.__('outlet.address').':</strong><br>'.$this->address_city.', '.$this->address_street.'</div>';
+        $mapAdminPopupContent = $mapPopupContent;
+        return $mapAdminPopupContent;
     }
 
     public function locType()

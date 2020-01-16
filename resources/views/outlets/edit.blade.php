@@ -6,7 +6,6 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         @if (request('action') == 'delete' && $outlet)
-        @can('delete', $outlet)
             <div class="card">
                 <div class="card-header">{{ __('outlet.delete') }}</div>
                 <div class="card-body">
@@ -27,19 +26,30 @@
                 <hr style="margin:0">
                 <div class="card-body text-danger">{{ __('outlet.delete_confirm') }}</div>
                 <div class="card-footer">
-                    <form method="POST" action="{{ route('outlets.destroy', $outlet) }}" accept-charset="UTF-8" onsubmit="return confirm({{ __('app.delete_confirm') }})" class="del-form float-right" style="display: inline;">
+                    @if (Request::is('admin/*'))
+                        <form method="POST" action="{{ route('admin.outlets.destroy', $outlet) }}" accept-charset="UTF-8" onsubmit="return confirm({{ __('app.delete_confirm') }})" class="del-form float-right" style="display: inline;">
+                    @else
+                        <form method="POST" action="{{ route('outlets.destroy', $outlet) }}" accept-charset="UTF-8" onsubmit="return confirm({{ __('app.delete_confirm') }})" class="del-form float-right" style="display: inline;">
+                    @endif
                         {{ csrf_field() }} {{ method_field('delete') }}
                         <input name="outlet_id" type="hidden" value="{{ $outlet->id }}">
                         <button type="submit" class="btn btn-danger">{{ __('app.delete_confirm_button') }}</button>
                     </form>
-                    <a href="{{ route('outlets.edit', $outlet) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @if (Request::is('admin/*'))
+                        <a href="{{ route('admin.outlets.edit', $outlet) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @else
+                        <a href="{{ route('outlets.edit', $outlet) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @endif
                 </div>
             </div>
-        @endcan
         @else
         <div class="card">
             <div class="card-header">{{ __('outlet.edit') }}</div>
-            <form method="POST" action="{{ route('outlets.update', $outlet) }}" accept-charset="UTF-8">
+            @if (Request::is('admin/*'))
+                <form method="POST" action="{{ route('admin.outlets.update', $outlet) }}" accept-charset="UTF-8" id="contact_create">
+            @else
+                <form method="POST" action="{{ route('outlets.update', $outlet) }}" accept-charset="UTF-8" id="contact_create">
+            @endif
                 {{ csrf_field() }} {{ method_field('patch') }}
                 <div class="card-body">
                     <div class="form-group">
@@ -91,10 +101,15 @@
                 </div>
                 <div class="card-footer">
                     <input type="submit" value="{{ __('outlet.update') }}" class="btn btn-success">
-                    <a href="{{ route('outlets.show', $outlet) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
-                    @can('delete', $outlet)
+                    @if (Request::is('admin/*'))
+                        <a href="{{ route('admin.outlets.show', $outlet) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                        <a href="{{ route('admin.outlets.edit', [$outlet, 'action' => 'delete']) }}" id="del-outlet-{{ $outlet->id }}" class="btn btn-danger float-right">{{ __('app.delete') }}</a>
+                    @else
+                     <a href="{{ route('outlets.show', $outlet) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
                         <a href="{{ route('outlets.edit', [$outlet, 'action' => 'delete']) }}" id="del-outlet-{{ $outlet->id }}" class="btn btn-danger float-right">{{ __('app.delete') }}</a>
-                    @endcan
+                    @endif
+
+
                 </div>
                 <input type="hidden" id="address_street" name="address_street" value='{{ $outlet->address_street }}'>
                 <input type="hidden" id="address_city" name="address_city" value='{{ $outlet->address_city }}'>

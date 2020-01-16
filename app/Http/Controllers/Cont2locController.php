@@ -16,23 +16,31 @@ class Cont2locController extends Controller
     public function edit(Outlet $outlet)
     {
 
-        $user=Auth::user();
 
-        if (null == $user) {
-            App::abort(403, 'Требуется авторизация');
-        }
-        $this->authorize('view_post', $outlet);
-        if ($user->is_Admin()) {
-            $session = Session::get('SA_Inst_id');
-            if (null !== $session) {
-                $inst_id = $session;
-            } else {
-                $inst_id = Institution::first()->id;
+        $user=Auth::user();
+        $admin = Auth::guard('admin')->user();
+        if ($admin)
+        {
+            $session = session('SA_Inst_id');
+
+            if (null !== $session)
+            {
+                $user_id = Institution::find (strval($session))->creator_id;
+                // dd($institution);
             }
-            $user_id = Institution::find(strval($inst_id))->creator_id;
+            else {
+                $user_id = Institution::get()->sortBy('name_ru')->first()->creator_id;
+            }
         }
-        else {
-            $user_id = $user->id;
+        elseif (null!==$user )
+        {
+
+            $user_id = Auth::id();
+        }
+
+        else
+        {
+            App::abort(403, 'Требуется авторизация');
         }
 
         $contactQuery = Contact::query();
@@ -55,6 +63,12 @@ class Cont2locController extends Controller
                 );
             }
         }
-        return  redirect()->route('outlets.show', $outlet);
+
+        if (preg_match('/admin/', $request->getRequestUri())){
+        return redirect()->route('admin.outlets.show', $outlet);
+        }
+        else {
+        return redirect()->route('outlets.show', $outlet);
+        }
     }
 }

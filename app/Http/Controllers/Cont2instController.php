@@ -15,20 +15,29 @@ class Cont2instController extends Controller
     public function edit()
     {
         $user=Auth::user();
-        if (null == $user) {
-            App::abort(403, 'Требуется авторизация');
-        }
-        if ($user->is_Admin()) {
-         $session = Session::get('SA_Inst_id');
-            if (null !== $session) {
-                $inst_id = $session;
-            } else {
-                $inst_id = Institution::first()->id;
+        $admin = Auth::guard('admin')->user();
+        if ($admin)
+        {
+            $session = session('SA_Inst_id');
+
+            if (null !== $session)
+            {
+                $user_id = Institution::find (strval($session))->creator_id;
+                // dd($institution);
             }
-        $user_id = Institution::find(strval($inst_id))->creator_id;
+            else {
+                $user_id = Institution::get()->sortBy('name_ru')->first()->creator_id;
+            }
         }
-        else {
-            $user_id = $user->id;
+        elseif (null!==$user )
+        {
+
+            $user_id = Auth::id();
+        }
+
+        else
+        {
+            App::abort(403, 'Требуется авторизация');
         }
         $institution = DB::table('institutions')->where('creator_id', $user_id)->first();
         $contactQuery = Contact::query();
@@ -46,20 +55,29 @@ class Cont2instController extends Controller
     public function store(Request $request)
     {
         $user=Auth::user();
-        if (null == $user) {
-            App::abort(403, 'Требуется авторизация');
-        }
-        if ($user->is_Admin()) {
-            $session = Session::get('SA_Inst_id');
-            if (null !== $session) {
-                $inst_id = $session;
-            } else {
-                $inst_id = Institution::first()->id;
+        $admin = Auth::guard('admin')->user();
+        if ($admin)
+        {
+            $session = session('SA_Inst_id');
+
+            if (null !== $session)
+            {
+                $user_id = Institution::find (strval($session))->creator_id;
+                // dd($institution);
             }
-            $user_id = Institution::find(strval($inst_id))->creator_id;
+            else {
+                $user_id = Institution::get()->sortBy('name_ru')->first()->creator_id;
+            }
         }
-        else {
-            $user_id = $user->id;
+        elseif (null!==$user )
+        {
+
+            $user_id = Auth::id();
+        }
+
+        else
+        {
+            App::abort(403, 'Требуется авторизация');
         }
         $institution = DB::table('institutions')->where('creator_id', $user_id)->first();
         //dd($institution);
@@ -73,6 +91,11 @@ class Cont2instController extends Controller
                 );
             }
         }
-        return  redirect()->route('institution.show');
+        if (preg_match('/admin/', $request->getRequestUri())){
+            return redirect()->route('admin.institution.show');
+        }
+        else {
+            return redirect()->route('institution.show');
+        }
     }
 }

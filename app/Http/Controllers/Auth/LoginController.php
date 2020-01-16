@@ -18,7 +18,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+   use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -36,4 +36,13 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function showLoginForm()
+    {
+        $loginRoute = 'login';
+        $forgotPasswordRoute = 'password.request';
+        return view('auth.login', compact('loginRoute', 'forgotPasswordRoute'));
+    }
+
+
 }

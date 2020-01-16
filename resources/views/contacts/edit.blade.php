@@ -6,7 +6,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         @if (request('action') == 'delete' && $contact)
-            @can('delete', $contact)
+
                 <div class="card">
                     <div class="card-header">{{ __('outlet.delete') }}</div>
                     <div class="card-body">
@@ -24,19 +24,30 @@
                     <hr style="margin:0">
                     <div class="card-body text-danger">{{ __('contact.delete_confirm') }}</div>
                     <div class="card-footer">
-                        <form method="POST" action="{{ route('contacts.destroy', $contact) }}" accept-charset="UTF-8" onsubmit="return confirm({{ __('app.delete_confirm') }})" class="del-form float-right" style="display: inline;">
+                        @if (Request::is('admin/*'))
+                            <form method="POST" action="{{ route('admin.contacts.destroy', $contact->id) }}" accept-charset="UTF-8" onsubmit="return confirm({{ __('app.delete_confirm') }})" class="del-form float-right" style="display: inline;">
+                        @else
+                            <form method="POST" action="{{ route('contacts.destroy', $contact->id) }}" accept-charset="UTF-8" onsubmit="return confirm({{ __('app.delete_confirm') }})" class="del-form float-right" style="display: inline;">
+                         @endif
                             {{ csrf_field() }} {{ method_field('delete') }}
                             <input name="contact_id" type="hidden" value="{{ $contact->id }}">
                             <button type="submit" class="btn btn-danger">{{ __('app.delete_confirm_button') }}</button>
                         </form>
-                        <a href="{{ route('contacts.edit', $contact) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                        @if (Request::is('admin/*'))
+                            <a href="{{ route('admin.contacts.edit', $contact) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                        @else
+                            <a href="{{ route('contacts.edit', $contact) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                        @endif
                     </div>
                 </div>
-            @endcan
         @else
         <div class="card">
             <div class="card-header">{{ __('contact.edit') }}</div>
-            <form method="POST" action="{{ route('contacts.update') }}" accept-charset="UTF-8" id="contact_create">
+            @if (Request::is('admin/*'))
+                <form method="POST" action="{{ route('admin.contacts.update') }}" accept-charset="UTF-8" id="contact_create">
+            @else
+                <form method="POST" action="{{ route('contacts.update') }}" accept-charset="UTF-8" id="contact_create">
+            @endif
                 {{ csrf_field() }}
                 <div class="card-body">
                     <div class="form-group">
@@ -51,7 +62,7 @@
                     </div>
                     <div class="form-group">
                         <label for="phone" class="control-label">{{ __('contact.phone') }}</label>
-                        <input id="phone" type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" value="{{ old('phone', $contact->phone) }}" required>
+                        <input id="phone" type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" value="{{ old('phone', $contact->phone) }}" >
                         {!! $errors->first('phone', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
                     <div class="form-group">
@@ -74,10 +85,20 @@
                 <div class="card-footer" >
 
                      <input type="submit" value="{{ __('contact.update')}}" class="btn btn-success">
+
+                    @if (Request::is('admin/*'))
+                        <a href="{{ route('admin.contacts.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    @else
                         <a href="{{ route('contacts.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
-                    @can('delete', $contact)
+                    @endif
+
+                    @if (Request::is('admin/*'))
+                        <a href="{{ route('admin.contacts.edit', [$contact, 'action' => 'delete']) }}" id="del-contact-{{ $contact->id }}" class="btn btn-danger float-right">{{ __('app.delete') }}</a>
+                    @else
                         <a href="{{ route('contacts.edit', [$contact, 'action' => 'delete']) }}" id="del-contact-{{ $contact->id }}" class="btn btn-danger float-right">{{ __('app.delete') }}</a>
-                    @endcan
+                    @endif
+
+
                 </div>
                     <input type = "hidden" value="update" name="rules_type">
                     <input type = "hidden" value="{{$contact->id}}" name="update_id">

@@ -26,7 +26,7 @@ class ContactRequest extends FormRequest
            $rules  = [
             'name'  => 'required|max:60',
             'email' => 'email:rfc,dns',
-            'phone' => 'numeric',
+            'phone' => 'nullable|numeric',
             'language' => 'required',
             'type' => 'required',
             //

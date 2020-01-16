@@ -18,30 +18,28 @@ use App\Http\Controllers\Controller;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     public function dashboard()
     {
-        $user=Auth::user();
+        $admin = Auth::guard('admin')->user();
         $institutions = Institution::get()->sortBy('name_ru');
-        if (null!== $user)
+        if (null!== $admin)
         {
-            if ($user->is_Admin()) {
-                $session = Session::get('SA_Inst_id');
-                if (null !== $session) {
-                    $inst_id = $session;
-                } else {
-                    $inst_id = $institutions->first()->id;
-                }
-            }
-            else {
+            $session = Session::get('SA_Inst_id');
+            $inst_id = $session ?? $institutions->first()->id;
+
+        }
+        else {
+
                 App::abort(500, 'Нет данных об организации');
-            }
+        }
 
 
         return view('admin.dashboard', compact('institutions', 'inst_id'));
-        }
-        else {
-           return redirect('/');
-        }
+
     }
 
     public function store(Request $request)
@@ -63,15 +61,12 @@ class AdminController extends Controller
     }
     public function user_store(Request $request)
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
-        if ( !($auth_user->is_Admin()))
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -87,15 +82,12 @@ class AdminController extends Controller
     }
     public function user_update(Request $request)
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
-        if ( !($auth_user->is_Admin()))
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
@@ -111,12 +103,8 @@ class AdminController extends Controller
     }
     public function user_index()
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        if ( !($auth_user->is_Admin()))
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
@@ -133,12 +121,8 @@ class AdminController extends Controller
     }
     public function user_create()
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        if ( !($auth_user->is_Admin()))
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
@@ -146,12 +130,8 @@ class AdminController extends Controller
     }
     public function user_edit($user_id)
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
-        {
-        return App::abort(403, 'Требуется авторизация');
-        }
-        if ( !($auth_user->is_Admin()))
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
@@ -161,12 +141,8 @@ class AdminController extends Controller
     public function name_create()
 
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        if ( !($auth_user->is_Admin()))
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
@@ -174,12 +150,8 @@ class AdminController extends Controller
     }
     public function name_store(Request $request)
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        if ( !($auth_user->is_Admin()))
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
@@ -204,33 +176,34 @@ class AdminController extends Controller
     }
     public function inst_create()
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
-        if ( !($auth_user->is_Admin()))
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        $instnames = DB::table('instnames')->get();
+        $instnames = DB::table('instnames')->orderBy('name_ru')->get();
 
-        $users = DB::table('users')->get();
+        $users = DB::table('users')->orderBy('name')->get();
         return view('admin.inst_create', compact('instnames','users'));
     }
     public function inst_store(Request $request)
     {
 
-        $auth_user = Auth::user();
-        if (null == $auth_user)
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
-        if ( !($auth_user->is_Admin()))
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        $data = $request->all();
+        $data = $request->validate([
+            'inst_name' =>'unique:institutions,inst_name_id' ,
+            'creator_id' => 'required',
+            'inst_type' => 'required',
+            'info_URL_en' => 'required|url',
+            'info_URL_ru' => 'nullable|url',
+            'policy_URL_en' => 'required|url',
+            'policy_URL_ru' => 'nullable|url',
+
+        ]);
         $institution = new Institution;
         $institution->inst_name_id = $data['inst_name'];
         $institution->creator_id = $data['creator_id'];
@@ -241,12 +214,8 @@ class AdminController extends Controller
     }
     public function realm_create()
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        if ( !($auth_user->is_Admin()))
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
@@ -261,12 +230,8 @@ class AdminController extends Controller
     }
     public function realm_store(Request $request)
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        if ( !($auth_user->is_Admin()))
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
@@ -293,12 +258,8 @@ class AdminController extends Controller
     }
     public function realm_edit()
     {
-        $auth_user = Auth::user();
-        if (null == $auth_user)
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        if ( !($auth_user->is_Admin()))
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
         {
             return App::abort(403, 'Требуется авторизация');
         }
@@ -317,24 +278,20 @@ class AdminController extends Controller
     }
     public function realm_destroy(Request $request)
     {
-         $user=Auth::user();
-        $auth_user = Auth::user();
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
+        {
+            return App::abort(403, 'Требуется авторизация');
+        }
         $realm = $request->input('realm');
-        if (null == $auth_user)
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
-        if ( !($auth_user->is_Admin()))
-        {
-            return App::abort(403, 'Требуется авторизация');
-        }
+
         $deleted = DB::table('realms')->where("realm", "=", $realm)->delete();
 
             return redirect()->route('admin.dashboard');
     }
 
 
-    public function PasswordRequest (Request $request)
+    public function PasswordSend (Request $request)
     {
 
         $user = User::find($request->input('user_id'));

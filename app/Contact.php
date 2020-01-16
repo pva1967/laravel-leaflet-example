@@ -19,6 +19,18 @@ class Contact extends Model
 
         return $link;
     }
+    public function getAdminLinkAttribute()
+    {
+        $title = __('app.show_detail_title', [
+            'name' => $this->name
+        ]);
+        $link = '<a href="'.route('admin.contacts.edit', $this).'"';
+        $link .= ' title="'.$title.'">';
+        $link .= $this->name;
+        $link .= '</a>';
+
+        return $link;
+    }
     public function getLanguageNameAttribute()
     {
         $ln_type=$this->language;

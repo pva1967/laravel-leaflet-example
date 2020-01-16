@@ -55,8 +55,14 @@
                 <div id="mapid"></div>
             </div>
             <div class="card-footer">
-                <a href="{{ route('institution.edit') }}" id="edit-institution-{{ $institution->id }}" class="btn btn-warning">{{ __('institution.edit') }}</a>
-                <a href="{{ route('contacts2institution.edit') }}" id="edit-institution" class="btn btn-warning">{{ __('contact.add_contacts') }}</a>
+                @if (Request::is('admin/*'))
+                    <a href="{{ route('admin.institution.edit') }}" id="edit-institution-{{ $institution->id }}" class="btn btn-warning">{{ __('institution.edit') }}</a>
+                    <a href="{{ route('admin.contacts2institution.edit') }}" id="edit-institution" class="btn btn-warning">{{ __('contact.add_contacts') }}</a>
+                @else
+                    <a href="{{ route('institution.edit') }}" id="edit-institution-{{ $institution->id }}" class="btn btn-warning">{{ __('institution.edit') }}</a>
+                    <a href="{{ route('contacts2institution.edit') }}" id="edit-institution" class="btn btn-warning">{{ __('contact.add_contacts') }}</a>
+               @endif
+
 
             </div>
         </div>

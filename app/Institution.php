@@ -42,4 +42,13 @@ class Institution extends Model
 
         return $name_ru->name_ru ?? '';
     }
+    public function getNameEnAttribute()
+    {
+        $name_en = DB::table('instnames')
+            ->where('id','=', $this->inst_name_id)
+            ->select('name_en')
+            ->first();
+
+        return $name_en->name_en ?? '';
+    }
 }
