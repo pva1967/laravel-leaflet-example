@@ -168,9 +168,9 @@ Route::get('contacts_institution/store', function(){
     return App::abort(404);
 });
 
-Route::get('import', 'DataController@import')->name('data.import');
-Route::get('export', 'DataController@export')->name('data.export');
-Route::get('export_m', 'DataController@export_m')->name('data.export_m');
+Route::get('/admin/import', 'DataController@import')->name('data.import');
+Route::get('/admin/export', 'DataController@export')->name('data.export');
+Route::get('/admin/export_m', 'DataController@export_m')->name('data.export_m');
 
 
 
@@ -178,9 +178,3 @@ Route::get('export_m', 'DataController@export_m')->name('data.export_m');
 /* copy controllers for admin */
 
 
-
-
-
-Route::get('import', 'DataController@import')->name('data.import');
-Route::get('export', 'DataController@export')->name('data.export');
-Route::get('export_m', 'DataController@export_m')->name('data.export_m');

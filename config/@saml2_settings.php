@@ -1,6 +1,7 @@
 <?php
 
 //This is variable is an example - Just make sure that the urls in the 'idp' config are ok.
+$idp_host = 'https://idp.ssocircle.com:443';
 
 return $settings = array(
 
@@ -23,7 +24,7 @@ return $settings = array(
      * which middleware group to use for the saml routes
      * Laravel 5.2 will need a group which includes StartSession
      */
-    'routesMiddleware' => ['web'],
+    'routesMiddleware' => ['admin'],
 
     /**
      * Indicates how the parameters will be
@@ -147,29 +148,28 @@ guRu/Vq3xhaIgJRmywKv4CaBxqbV',
         ),
     ),
 
-    'idpNames' => ['runnet'],
     // Identity Provider Data that we want connect with our SP
     'idp' => array(
         // Identifier of the IdP entity  (must be a URI)
 
-        'entityId' => 'https://idp-01.runnet.ru/saml/saml2/idp/metadata.php',
+        'entityId' => $idp_host . '/sso/SSOPOST/metaAlias/publicidp',
         // SSO endpoint info of the IdP. (Authentication Request protocol)
         'singleSignOnService' => array(
             // URL Target of the IdP where the SP will send the Authentication Request Message,
             // using HTTP-Redirect binding.
 
-            'url' => "https://idp-01.runnet.ru/saml/saml2/idp/SSOService.php",
+            'url' => $idp_host . '/sso/SSORedirect/metaAlias/publicidp',
         ),
         // SLO endpoint info of the IdP.
         'singleLogoutService' => array(
             // URL Location of the IdP where the SP will send the SLO Request,
             // using HTTP-Redirect binding.
 
-            'url' => 'https://idp-01.runnet.ru/saml/saml2/idp/SingleLogoutService.php',
+            'url' => $idp_host . '/sso/IDPSloRedirect/metaAlias/publicidp',
         ),
         // Public x509 certificate of the IdP
 
-        'x509cert' => 'MIID7zCCAtagAwIBAgIBADANBgkqhkiG9w0BAQ0FADCBkDELMAkGA1UEBhMCcnUx GDAWBgNVBAgMD1Nhbmt0LVBldGVyYnVyZzEPMA0GA1UECgwGUlVOTmV0MRkwFwYD VQQDDBBpZHAtMDEucnVubmV0LnJ1MRgwFgYDVQQHDA9TYW5rdC1QZXRlcmJ1cmcx ITAfBgkqhkiG9w0BCQEWEnZhc2lseWV2QHJ1bm5ldC5ydTAeFw0xODAzMTIwNzQy MDBaFw00MDA0MjUwNzQyMDBaMIGQMQswCQYDVQQGEwJydTEYMBYGA1UECAwPU2Fu a3QtUGV0ZXJidXJnMQ8wDQYDVQQKDAZSVU5OZXQxGTAXBgNVBAMMEGlkcC0wMS5y dW5uZXQucnUxGDAWBgNVBAcMD1Nhbmt0LVBldGVyYnVyZzEhMB8GCSqGSIb3DQEJ ARYSdmFzaWx5ZXZAcnVubmV0LnJ1MIIBIzANBgkqhkiG9w0BAQEFAAOCARAAMIIB CwKCAQIAzU09LXZcMusVKmQHLcUWzAQQyYbcJNa6mqAsQB43WjUGCqv6ChkMB/vl MePnMFdjrpWs4HNKrC0GN8cdWkJ3hnYyvxmKCAP8k0cHg4j+Zt5QWrAGOzNYidJQ xPmoCNqk3SGGT8opvs0IjOfQWSxP0MI5JXDNVvTvu8jHezCuXyRC4pbHn4PjY7/6 NHhcksELHDvlrvWrjC+GGIlt3YvNvaDrCUBIBM9/5XCczOA/9/IxNSV5zz4scd12 tuzRtwgel0JCbqUbgDwQtxiP+9AR2uUJI+IBwO6zmWxfwmqWuqlPvrcguaO/Av1c nHwbgay9hxIdMKdj8s19kjbEgtxDQpECAwEAAaNQME4wHQYDVR0OBBYEFBNOea1J HeJe4YESUmuy54D3SpeFMB8GA1UdIwQYMBaAFBNOea1JHeJe4YESUmuy54D3SpeF MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQENBQADggECAGAeqn0gBFNqZN9CgxKB Q6tWzJCOzLJ0r4L/IAKnfEgbm8YEc1kK+6fk79UEpawMKIrBeSoH05RzOBATTe3A R0kDFBbkloDQw7eLdo3il6ypN3Zhs9opl3EJUe9IQOscy1Jdjnz1ZsoogNDJ2iCl idBZzl3hShKf2XzgT4DL+P7GRahrAfhDBWwL9650DkDEYMwItBYJb4Hh+wXH10CQ LfzonFW7jUbo/q8hb6NuCs0SePcXFg93RXVzvU3DEYnp6oDAaoe165w45x1XnbC4 y0fH4+Ryxi7uLwk6A3ArdicAEtmc6Pk92MjtDRCOJ6IepKEPYbKTOfGyl+4yftfG UNNk',
+        'x509cert' => 'MIIEYzCCAkugAwIBAgIDIAZmMA0GCSqGSIb3DQEBCwUAMC4xCzAJBgNVBAYTAkRFMRIwEAYDVQQKDAlTU09DaXJjbGUxCzAJBgNVBAMMAkNBMB4XDTE2MDgwMzE1MDMyM1oXDTI2MDMwNDE1MDMyM1owPTELMAkGA1UEBhMCREUxEjAQBgNVBAoTCVNTT0NpcmNsZTEaMBgGA1UEAxMRaWRwLnNzb2NpcmNsZS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCAwWJyOYhYmWZF2TJvm1VyZccs3ZJ0TsNcoazr2pTWcY8WTRbIV9d06zYjngvWibyiylewGXcYONB106ZNUdNgrmFd5194Wsyx6bPvnjZEERny9LOfuwQaqDYeKhI6c+veXApnOfsY26u9Lqb9sga9JnCkUGRaoVrAVM3yfghv/Cg/QEg+I6SVES75tKdcLDTt/FwmAYDEBV8l52bcMDNF+JWtAuetI9/dWCBe9VTCasAr2Fxw1ZYTAiqGI9sW4kWS2ApedbqsgH3qqMlPA7tg9iKy8Yw/deEn0qQIx8GlVnQFpDgzG9k+jwBoebAYfGvMcO/BDXD2pbWTN+DvbURlAgMBAAGjezB5MAkGA1UdEwQCMAAwLAYJYIZIAYb4QgENBB8WHU9wZW5TU0wgR2VuZXJhdGVkIENlcnRpZmljYXRlMB0GA1UdDgQWBBQhAmCewE7aonAvyJfjImCRZDtccTAfBgNVHSMEGDAWgBTA1nEA+0za6ppLItkOX5yEp8cQaTANBgkqhkiG9w0BAQsFAAOCAgEAAhC5/WsF9ztJHgo+x9KV9bqVS0MmsgpG26yOAqFYwOSPmUuYmJmHgmKGjKrj1fdCINtzcBHFFBC1maGJ33lMk2bM2THx22/O93f4RFnFab7t23jRFcF0amQUOsDvltfJw7XCal8JdgPUg6TNC4Fy9XYv0OAHc3oDp3vl1Yj8/1qBg6Rc39kehmD5v8SKYmpE7yFKxDF1ol9DKDG/LvClSvnuVP0b4BWdBAA9aJSFtdNGgEvpEUqGkJ1osLVqCMvSYsUtHmapaX3hiM9RbX38jsSgsl44Rar5Ioc7KXOOZFGfEKyyUqucYpjWCOXJELAVAzp7XTvA2q55u31hO0w8Yx4uEQKlmxDuZmxpMz4EWARyjHSAuDKEW1RJvUr6+5uA9qeOKxLiKN1jo6eWAcl6Wr9MreXR9kFpS6kHllfdVSrJES4ST0uh1Jp4EYgmiyMmFCbUpKXifpsNWCLDenE3hllF0+q3wIdu+4P82RIM71n7qVgnDnK29wnLhHDat9rkC62CIbonpkVYmnReX0jze+7twRanJOMCJ+lFg16BDvBcG8u0n/wIDkHHitBI7bU1k6c6DydLQ+69h8SCo6sO9YuD+/3xAGKad4ImZ6vTwlB4zDCpu6YgQWocWRXE+VkOb+RBfvP755PUaLfL63AFVlpOnEpIio5++UjNJRuPuAA=',
         /*
          *  Instead of use the whole x509cert you can use a fingerprint
          *  (openssl x509 -noout -fingerprint -in "idp.crt" to generate it)
@@ -257,13 +257,13 @@ guRu/Vq3xhaIgJRmywKv4CaBxqbV',
         ),
     ),
 
-    /* Interoperable SAML 2.0 Web Browser SSO Profile [saml2int]   http://saml2int.org/profile/current
+/* Interoperable SAML 2.0 Web Browser SSO Profile [saml2int]   http://saml2int.org/profile/current
 
-       'authnRequestsSigned' => false,    // SP SHOULD NOT sign the <samlp:AuthnRequest>,
-                                          // MUST NOT assume that the IdP validates the sign
-       'wantAssertionsSigned' => true,
-       'wantAssertionsEncrypted' => true, // MUST be enabled if SSL/HTTPs is disabled
-       'wantNameIdEncrypted' => false,
-    */
+   'authnRequestsSigned' => false,    // SP SHOULD NOT sign the <samlp:AuthnRequest>,
+                                      // MUST NOT assume that the IdP validates the sign
+   'wantAssertionsSigned' => true,
+   'wantAssertionsEncrypted' => true, // MUST be enabled if SSL/HTTPs is disabled
+   'wantNameIdEncrypted' => false,
+*/
 
 );
