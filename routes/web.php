@@ -39,14 +39,16 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
 
     Route::post('/realm_store', 'AdminController@realm_store')->name('realm_store');
     /*Отслыка ссылки на изменение пароля для админов организаций*/
-    Route::post('send_password', 'AdminController@PasswordSend')->name('password.send');
+    Route::post('/send_password', 'AdminController@PasswordSend')->name('password.send');
 
-    Route::post('institution/store','InstitutionController@store')->name('institution.store');
-    Route::get('institution/store', function(){
+    Route::post('/institution/store','InstitutionController@store')->name('institution.store');
+    Route::get('/institution/store', function(){
         return App::abort(404);
     });
 
-
+    Route::get('/import', 'AdminDataController@import')->name('data.import');
+    Route::get('/export', 'AdminDataController@export')->name('data.export');
+    Route::get('/export_m', 'AdminDataController@export_m')->name('data.export_m');
 
     Route::namespace('Auth')->group(function(){
 
@@ -168,13 +170,5 @@ Route::get('contacts_institution/store', function(){
     return App::abort(404);
 });
 
-Route::get('/admin/import', 'DataController@import')->name('data.import');
-Route::get('/admin/export', 'DataController@export')->name('data.export');
-Route::get('/admin/export_m', 'DataController@export_m')->name('data.export_m');
-
-
-
-
-/* copy controllers for admin */
 
 

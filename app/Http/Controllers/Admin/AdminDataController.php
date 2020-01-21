@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use DB;
 use App\Institution;
 use App\Contact;
@@ -16,7 +16,7 @@ use \Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
-class DataController extends Controller
+class AdminDataController extends Controller
 {
     protected $address_street, $address_city;
     public function import()
@@ -73,7 +73,7 @@ class DataController extends Controller
                 if (!(User::where('email', $email)->exists()))
                 {
                     $user = new User();
-                    $user->password = '$2y$10$pfdZ.hP9BfcyT67J7wH8ZeI1jofG1fOGWN/jDXsvfLC8kmwUEJAlu';
+                    $user->password = Hash::make('123456');
                     $user->email = $email;
                     $user->name = $name;
                     $user->save();
@@ -229,9 +229,11 @@ class DataController extends Controller
             }
 
             $instname = DB::table('instnames')
-                ->find($institution->id);
+                ->find($institution->inst_name_id);
+
             $institution_xml['inst_name'][]=['_attributes' => ['lang' => 'en'],'fake'=>$instname->name_en];
-            if (isset($instname->name_ru)) {
+
+            if (isset($instname->name_en)) {
                 $institution_xml['inst_name'][]=['_attributes' => ['lang' => 'ru'],'fake'=>$instname->name_ru];
             }
 
@@ -304,7 +306,6 @@ class DataController extends Controller
     public function export_m()
     {
         $markers=array();
-        $marker=array();
         $institutions = Institution::all();
         foreach($institutions as $institution){
             $name_1=DB::table('instnames')->where('id', '=', $institution->id)->first();

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-
 use App;
 use App\Institution;
 use App\Realm;
