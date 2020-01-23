@@ -2,8 +2,10 @@
 
 namespace App;
 
+use App\Notifications\MailResetPasswordToken;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Notifications\AdminResetPasswordToken;
 
 class Admin extends Authenticatable
 {
@@ -20,5 +22,9 @@ class Admin extends Authenticatable
     ];
     public function is_Admin(){
         return $this != null;
+    }
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new AdminResetPasswordToken($token, $this->name));
     }
 }

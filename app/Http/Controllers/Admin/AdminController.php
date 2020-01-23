@@ -298,7 +298,6 @@ class AdminController extends Controller
        // dd($user, $new_token);
         $credentials = ['email' => $user->email];
         $response = Password::sendResetLink($credentials, function (Message $message) {
-            $message->subject(Resetttttttttttttttttt);
         });
 
         switch ($response) {
