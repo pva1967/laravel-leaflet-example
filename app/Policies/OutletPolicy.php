@@ -67,14 +67,5 @@ class OutletPolicy
              return true;
 
     }
-    public function view_post (User $user, Outlet $outlet)
-    {
-        if ($user->is_Admin()) {
-            return true;
-        }
-        else {
-            return $outlet->creator_id == $user->id;
-        }
 
-    }
 }

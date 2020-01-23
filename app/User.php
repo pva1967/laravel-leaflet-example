@@ -32,17 +32,7 @@ class User extends Authenticatable
     ];
 
 
-    public function is_Admin()
-    {
-        $role= DB::table('roles')
-            ->where('user_id','=',$this->id)
-            ->select('roles.role as role')
-            ->first();
-        if (null !== $role) {
-            return $role->role == 'super_admin';
-        }
-        return false;
-    }
+
     public function sendPasswordResetNotification($token)
     {
         $curr_user=Auth::user();
