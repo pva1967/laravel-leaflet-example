@@ -13,8 +13,12 @@
                             {{ 'Письмо со ссылкой на изменение пароля успешно отправлено' }}
                         </div>
                     @endif
-
+                        @if (Request::is('admin/*'))
+                    <form method="POST" action="{{ route('admin.password.email') }}">
+                        @else
                     <form method="POST" action="{{ route('password.email') }}">
+                        @endif
+
                         @csrf
 
                         <div class="form-group row">

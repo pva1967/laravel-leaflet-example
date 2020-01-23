@@ -8,7 +8,13 @@
                 <div class="card-header">{{ __('auth.Reset') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('password.update') }}">
+
+                    @if (Request::is('admin/*'))
+                        <form method="POST" action="{{ route('admin.password.update') }}">
+                     @else
+                        <form method="POST" action="{{ route('password.update') }}">
+                     @endif
+
                         @csrf
 
                         <input type="hidden" name="token" value="{{ $token }}">
