@@ -46,7 +46,7 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
         return App::abort(404);
     });
 
-    Route::get('/import', 'AdminDataController@import')->name('data.import');
+    //Route::get('/import', 'AdminDataController@import')->name('data.import');
     Route::get('/export', 'AdminDataController@export')->name('data.export');
     Route::get('/export_m', 'AdminDataController@export_m')->name('data.export_m');
 
