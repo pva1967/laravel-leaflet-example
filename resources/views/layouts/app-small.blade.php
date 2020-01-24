@@ -23,11 +23,11 @@
     <link rel="stylesheet" href="{{ asset('css/MarkerCluster.Default.css') }}" />
     @yield('styles')
 </head>
-<body>
+<body style="background-color: white;">
     <div id="app">
 
 
-        <main class="py-4 container">
+        <main class="py-4 container" style="padding: 0;">
             @yield('content')
         </main>
 
