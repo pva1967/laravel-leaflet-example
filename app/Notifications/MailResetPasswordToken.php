@@ -49,7 +49,7 @@ class MailResetPasswordToken extends Notification
             return (new MailMessage)
                 ->subject('Регистрация на monitor.eduroam.ru')
                 ->line("Уважаемый {$this->name}. Вы зарегистрированы на сайте monitor.eduroam.ru как администартор eduroam своей организации. Для окончания регистрации пройдите по ссылке.")
-                ->action('Закончить регистрацию', url('admin/password/reset', $this->token));
+                ->action('Закончить регистрацию', url('password/reset', $this->token));
         }
         else {
             return (new MailMessage)

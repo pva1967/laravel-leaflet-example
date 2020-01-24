@@ -39,6 +39,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+
         //
     }
 
@@ -49,6 +50,8 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
+
     protected function mapWebRoutes()
     {
         Route::middleware('web')

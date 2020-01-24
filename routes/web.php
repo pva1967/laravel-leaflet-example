@@ -171,4 +171,4 @@ Route::get('contacts_institution/store', function(){
 });
 
 
-
+Route::get('/map_export', 'MapExportController@index')->middleware('guest');
