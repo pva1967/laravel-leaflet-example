@@ -339,7 +339,7 @@ class AdminDataController extends Controller
         $csv   = $formatter->toCsv();
         dd($csv);
     }
-    protected function address($lat, $lon, $language)
+    public function address($lat, $lon, $language)
     {
         $key = env('GOOGLE_API');
         $url="https://maps.googleapis.com/maps/api/geocode/json?latlng={$lat},{$lon}&key={$key}&language={$language}";
@@ -348,7 +348,6 @@ class AdminDataController extends Controller
 
         // decode the json
         $res = json_decode($resp_json, true);
-        dd($res);
         $this->address_city = '';
         $this->address_street = '';
         $address_route =''; $address_number ='';

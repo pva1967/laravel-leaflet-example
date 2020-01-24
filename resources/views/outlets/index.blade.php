@@ -29,13 +29,13 @@
             </div>
             <table class="table table-sm table-responsive-sm">
                 <thead>
-                    <tr>
-                        <th class="text-center">{{ __('app.table_no') }}</th>
-                        <th>{{ __('outlet.name') }}</th>
-                        <th>{{ __('outlet.address') }}</th>
-                        <th>{{ __('outlet.latitude') }}</th>
-                        <th>{{ __('outlet.longitude') }}</th>
-                    </tr>
+                <tr>
+                    <th class="text-center">{{ __('app.table_no') }}</th>
+                    <th>{{ __('outlet.name') }}</th>
+                    <th>{{ __('outlet.address') }}</th>
+                    <th>{{ __('outlet.latitude') }}</th>
+                    <th>{{ __('outlet.longitude') }}</th>
+                </tr>
                 </thead>
                 <tbody>
                     @foreach($outlets as $key => $outlet)
