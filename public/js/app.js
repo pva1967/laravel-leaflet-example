@@ -14104,7 +14104,6 @@ module.exports = function xhrAdapter(config) {
     if (requestData === undefined) {
       requestData = null;
     }
-
     // Send the request
     request.send(requestData);
   });
