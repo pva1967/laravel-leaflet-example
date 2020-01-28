@@ -341,10 +341,10 @@ class AdminDataController extends Controller
     }
     public function address($lat, $lon, $language)
     {
-        $key = env('GOOGLE_API');
+	$key = env('GOOGLE_API');
         $url="https://maps.googleapis.com/maps/api/geocode/json?latlng={$lat},{$lon}&key={$key}&language={$language}";
         // get the json response
-        $resp_json = file_get_contents($url);
+	$resp_json = file_get_contents($url);
 
         // decode the json
         $res = json_decode($resp_json, true);
