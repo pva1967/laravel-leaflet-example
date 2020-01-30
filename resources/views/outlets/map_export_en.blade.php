@@ -11,9 +11,9 @@
             <thead>
             <tr>
                 <th class="text-center">{{ __('app.table_no') }}</th>
-                <th>{{ __('institution.list') }}</th>
-                <th>{{ __('outlet.address_city') }}</th>
-                <th>{{ __('outlet.address_street') }}</th>
+                <th>Institution</th>
+                <th>City</th>
+                <th>Address</th>
             </tr>
             </thead>
             <tbody>
