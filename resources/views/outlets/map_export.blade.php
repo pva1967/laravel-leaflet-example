@@ -11,8 +11,8 @@
             <thead>
             <tr>
                 <th class="text-center">{{ __('app.table_no') }}</th>
-                <th>Организация</th>
-                <th>{{ __('outlet.name') }}</th>
+                <th>{{ __('institution.list') }}</th>
+                <th>{{ __('outlet.outlet') }}</th>
                 <th>{{ __('outlet.address_city') }}</th>
                 <th>{{ __('outlet.address_street') }}</th>
             </tr>
@@ -23,8 +23,8 @@
                     <td class="text-center"> {{$key+1 }}</td>
                     <td>{{ $outlet->name_ru }}</td>
                     <td>{{ $outlet->name }}</td>
-                    <td>{{ $outlet->address_city }}</td>
-                    <td>{{ $outlet->address_street }}</td>
+                    <td>{{ $outlet->address_city_ru }}</td>
+                    <td>{{ $outlet->address_street_ru }}</td>
                 </tr>
             @endforeach
             </tbody>
@@ -65,7 +65,7 @@
                     let b = outlets[i];
                     let title = b.name;
                     let marker = L.marker(new L.LatLng(b.latitude, b.longitude), { title: title });
-                    marker.bindPopup( b.name_ru, "; ", b.address_city, ", ", b.address_street );
+                    marker.bindPopup( b.name_ru, "; ", b.address_city_ru, ", ", b.address_street_ru );
                     markers.addLayer(marker);
                 }
 

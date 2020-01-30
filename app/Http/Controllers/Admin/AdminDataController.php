@@ -339,9 +339,24 @@ class AdminDataController extends Controller
         $csv   = $formatter->toCsv();
         dd($csv);
     }
+
+    public function fill_ru_address (){
+          $outlets = Outlet::all();
+       foreach ($outlets as $outlet) {
+           if (!$outlet->address_street_ru) {
+               $this->address($outlet->latitude, $outlet->longitude, 'ru');
+               $outlet->address_city_ru = $this->address_city;
+               $outlet->address_street_ru = $this->address_street;
+               $outlet->save();
+           }
+       }
+
+    }
+
     public function address($lat, $lon, $language)
     {
-	$key = env('GOOGLE_API');
+	//$key = env('GOOGLE_API');
+        $key = config('app.google_key');
         $url="https://maps.googleapis.com/maps/api/geocode/json?latlng={$lat},{$lon}&key={$key}&language={$language}";
         // get the json response
 	$resp_json = file_get_contents($url);
@@ -372,6 +387,7 @@ class AdminDataController extends Controller
 
         $this->address_street = "{$address_route}, {$address_number}";
     }
+
 
     protected function array_to_xml( $data, &$xml_data ) {
         foreach( $data as $key => $value ) {

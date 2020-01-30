@@ -49,6 +49,7 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
     //Route::get('/import', 'AdminDataController@import')->name('data.import');
     Route::get('/export', 'AdminDataController@export')->name('data.export');
     Route::get('/export_m', 'AdminDataController@export_m')->name('data.export_m');
+    Route::get('/fill_ru_address', 'AdminDataController@fill_ru_address')->name('data.fill_ru_address');
 
     Route::namespace('Auth')->group(function(){
 
