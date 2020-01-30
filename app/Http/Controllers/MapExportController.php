@@ -33,5 +33,21 @@ class MapExportController extends Controller
         return view('outlets.map_export', compact('outlets'));
 
     }
+    public function index_en()
+    {
+
+
+        $outlets = DB::table('outlets')
+            ->join('institutions', 'outlets.creator_id', '=', 'institutions.creator_id')
+            ->join('instnames', 'instnames.id', '=', 'institutions.inst_name_id')
+            ->select('outlets.latitude', 'outlets.longitude', 'outlets.name', 'instnames.name_en', 'outlets.address_city', 'outlets.address_street')
+            ->orderby('name_en')
+            ->get();
+
+
+
+        return view('outlets.map_export_en', compact('outlets'));
+
+    }
 
 }
