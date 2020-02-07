@@ -44,17 +44,23 @@ class MapExportController extends Controller
     {
 
 
-        $outlets = DB::table('outlets')
+        $outlets_pag = DB::table('outlets')
             ->join('institutions', 'outlets.creator_id', '=', 'institutions.creator_id')
             ->join('instnames', 'instnames.id', '=', 'institutions.inst_name_id')
             ->select('outlets.latitude', 'outlets.longitude', 'outlets.name', 'instnames.name_en', 'outlets.address_city', 'outlets.address_street')
             ->orderby('name_en')
             ->paginate(15);
+        $firstNumber = $outlets_pag->firstItem();
+        $outlets = DB::table('outlets')
+            ->join('institutions', 'outlets.creator_id', '=', 'institutions.creator_id')
+            ->join('instnames', 'instnames.id', '=', 'institutions.inst_name_id')
+            ->select('outlets.latitude', 'outlets.longitude', 'outlets.name', 'instnames.name_en', 'outlets.address_city', 'outlets.address_street')
+            ->orderby('name_en')
+            ->get();
 
 
 
-
-        return view('outlets.map_export_en', compact('outlets'));
+        return view('outlets.map_export_en', compact('outlets', 'outlets_pag', 'firstNumber'));
 
     }
 

@@ -17,14 +17,19 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($outlets as $key => $outlet)
+           @foreach($outlets_pag as $key => $outlet)
                 <tr>
-                    <td class="text-center"> {{$key+1 }}</td>
+                    <td class="text-center"> {{$firstNumber + $key }}</td>
                     <td>{{ $outlet->name_en }}</td>
                     <td>{{ $outlet->address_city }}</td>
                     <td>{{ $outlet->address_street }}</td>
                 </tr>
             @endforeach
+            </tbody>
+        </table>
+            <div id="page_links">
+                {{ $outlets_pag->links() }}
+            </div>
             </tbody>
         </table>
     </div>

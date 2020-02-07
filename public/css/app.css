@@ -11673,7 +11673,7 @@ a.text-dark:focus {
     width: 100%;
 }
 ul.pagination {
-    max-width: 100px;
+    max-width: 300px;
     margin: 0 auto;
 }
 ul.pagination  li{
