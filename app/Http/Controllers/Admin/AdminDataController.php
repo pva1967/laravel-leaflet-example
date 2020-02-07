@@ -212,6 +212,41 @@ class AdminDataController extends Controller
         }
     }
     public function export(){
+
+        $last_outlet = DB::table('outlets')
+            ->orderBy('updated_at', 'desc')
+            ->first();
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://eduroam.ru/general/institution.xml");
+// SSL important
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
+        curl_setopt($ch, CURLOPT_FILETIME, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+
+        $output = curl_exec($ch);
+
+        if ($output === false) {
+            $timestamp = 0;
+        }
+        else {
+            $timestamp = curl_getinfo($ch, CURLINFO_FILETIME);
+
+        }
+
+        curl_close($ch);
+        if ($timestamp > strtotime($last_outlet->updated_at)) {
+            echo $timestamp."<br>";
+            echo $last_outlet->updated_at;
+            echo "NULL";
+            return;
+        }
+
+
+
+
+
         $institutions = Institution::all();
         foreach ($institutions as $institution){
             $institution_xml =  array('instid' => $institution->inst_id);
@@ -282,7 +317,6 @@ class AdminDataController extends Controller
                     $phone = (isset($contact->phone)? $contact->phone:'');
                     $locs['contact'][] = ['name'=>$contact->name, 'email'=>$contact->email, 'phone'=>$phone, 'type'=>$contact->type, 'privacy'=>1];
                 }
-                dd(strtotime($location->updated_at));
                 $locs['SSID'] = 'eduroam';
                 $locs['enc_level'] = 'WPA2';
                 $locs['AP_no'] = $location->AP_no;
@@ -295,32 +329,12 @@ class AdminDataController extends Controller
         }
          $result = ArrayToXml::convert($a, [
             'rootElementName' => 'institutions',
-        ], true, 'UTF-8', 2.0, ['formatOutput' => true]);
+        ], true, 'UTF-8', "1.0", ['formatOutput' => true]);
         $result = str_replace("<fake>", '', $result);
         $result = str_replace("</fake>", '', $result);
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://eduroam.ru/general/institution.xml");
-// SSL important
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
-        curl_setopt($ch, CURLOPT_FILETIME, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 
-        $output = curl_exec($ch);
-
-        if ($output === false) {
-            die (curl_error($ch));
-        }
-
-        $timestamp = curl_getinfo($ch, CURLINFO_FILETIME);
-        if ($timestamp != -1) { //otherwise unknown
-           dd($timestamp, time());
-            //dd( date("Y-m-d H:i:s", $timestamp)); //etc
-        }
-
-        curl_close($ch);
-
-        $date = Carbon::now()->format('Y-m-d ');
+        echo $result;
 
     }
 

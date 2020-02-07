@@ -18,9 +18,9 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($outlets as $key => $outlet)
+            @foreach($outlets_pag as $key => $outlet)
                 <tr>
-                    <td class="text-center"> {{$key+1 }}</td>
+                    <td class="text-center"> {{$firstNumber + $key }}</td>
                     <td>{{ $outlet->name_ru }}</td>
                     <td>{{ $outlet->name }}</td>
                     <td>{{ $outlet->address_city_ru }}</td>
@@ -29,7 +29,9 @@
             @endforeach
             </tbody>
         </table>
-    </div>
+            <div id="page_links">
+            {{ $outlets_pag->links() }}
+            </div>
     </div>
 @endsection
 
@@ -63,6 +65,7 @@
 
                 for (let i = 0; i < outlets.length; i++) {
                     let b = outlets[i];
+                    console.log(b);
                     let title = b.name;
                     let marker = L.marker(new L.LatLng(b.latitude, b.longitude), { title: title });
                     marker.bindPopup( b.name_ru, "; ", b.address_city_ru, ", ", b.address_street_ru );

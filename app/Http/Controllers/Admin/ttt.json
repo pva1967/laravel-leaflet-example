@@ -1,0 +1,85 @@
+
+input {
+    syslog {
+    port => 514
+    codec => plain
+    #    syslog_field => "syslog"
+    type => "syslog"
+}
+}
+
+## JSCC RADSEC start
+
+filter{
+
+if [type] == "syslog" {
+mutate{
+remove_tag => [ "_grokparsefailure_sysloginput" ]
+}
+grok{
+match => [ "message", "(<%{POSINT:priority1}>%{SYSLOGTIMESTAMP:timestamp1} %{GREEDYDATA:hostname1})?<%{POSINT:priority}>%{SYSLOGTIMESTAMP:timestamp} %{GREEDYDATA:hostname} (%{GREEDYDATA:appname} )?\[%{GREEDYDATA:process}\](\:)? %{GREEDYDATA:syslog_message}" ]
+}
+if "_grokparsefailure" in [tags] {
+mutate{
+remove_tag => [ "_grokparsefailure" ]
+add_tag => [ "not_ftick" ]
+}
+}
+grok{
+match => [ "syslog_message", "(%{GREEDYDATA:bean} )?F-TICKS/%{GREEDYDATA:federation}/%{GREEDYDATA:version}[#]TS=%{GREEDYDATA:TS}[#]RP=%{GREEDYDATA:RP}[#]AP=%{GREEDYDATA:AP}[#]PN=%{GREEDYDATA:PN}([#]CSI=%{GREEDYDATA:CSI})?([#]AM=%{GREEDYDATA:AM})?([#]RESULT=%{GREEDYDATA:RESULT})?[#]" ]
+}
+if "_grokparsefailure" in [tags] {
+mutate{
+remove_tag => [ "_grokparsefailure" ]
+}
+grok{
+match => [ "syslog_message", "(%{GREEDYDATA:bean} )?F-TICKS/%{GREEDYDATA:federation}/%{GREEDYDATA:version}[#]RESULT=%{GREEDYDATA:RESULT}([#]CSI=%{GREEDYDATA:CSI})?[#]AP=%{GREEDYDATA:AP}[#]RP=%{GREEDYDATA:RP}[#]PN=%{GREEDYDATA:PN}[#]TS=%{GREEDYDATA:TS}[#]" ]
+}
+}
+grok {
+match => [ "RP", "(%{URIPROTO:RP_uri_proto}://(?:%{USER:RP_user}(?::[^@]*)?@)?)?(?:%{URIHOST:RP_uri_domain})?(?:%{URIPATHPARAM:RP_uri_param})?" ]
+}
+grok {
+match => [ "AP", "(%{URIPROTO:AP_uri_proto}://(?:%{USER:AP_user}(?::[^@]*)?@)?)?(?:%{URIHOST:AP_uri_domain})?(?:%{URIPATHPARAM:AP_uri_param})?" ]
+}
+geoip {
+source => "AP_uri_domain"
+target => "AP_geoip"
+}
+geoip {
+source => "RP_uri_domain"
+target => "RP_geoip"
+}
+}
+}
+
+output {
+if "metrics" not in [tags] {
+file {
+path => "/var/log/logstash/fticks.out"
+codec => line { format => "%{message}"}
+}
+
+elasticsearch {
+id => "fticks"
+hosts => [ "localhost:9200" ]
+if [host] = "83.149.214.22" {
+index => "fticks-%{+YYYY.MM.dd}"
+}
+#      index => "fticks"
+template_name => "fticks_template"
+#      template => "/etc/logstash/templates.d/fticks.json"
+document_type => "default"
+#      template_overwrite => true
+}
+}
+if "metrics" in [tags] {
+elasticsearch {
+id => "metrics"
+hosts => [ "localhost:9200" ]
+index => "metrics"
+}
+}
+}
+
+## JSCC RADSEC end

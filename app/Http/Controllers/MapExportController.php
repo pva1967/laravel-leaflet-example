@@ -21,6 +21,14 @@ class MapExportController extends Controller
     {
 
 
+        $outlets_pag = DB::table('outlets')
+            ->join('institutions', 'outlets.creator_id', '=', 'institutions.creator_id')
+            ->join('instnames', 'instnames.id', '=', 'institutions.inst_name_id')
+            ->select('outlets.latitude', 'outlets.longitude', 'outlets.name', 'instnames.name_ru', 'outlets.address_city_ru', 'outlets.address_street_ru')
+            ->orderby('name_ru')
+            //->get();
+             ->paginate(15);
+        $firstNumber = $outlets_pag->firstItem();
         $outlets = DB::table('outlets')
             ->join('institutions', 'outlets.creator_id', '=', 'institutions.creator_id')
             ->join('instnames', 'instnames.id', '=', 'institutions.inst_name_id')
@@ -29,8 +37,7 @@ class MapExportController extends Controller
             ->get();
 
 
-
-        return view('outlets.map_export', compact('outlets'));
+        return view('outlets.map_export', compact('outlets', 'outlets_pag', 'firstNumber'));
 
     }
     public function index_en()
@@ -42,7 +49,8 @@ class MapExportController extends Controller
             ->join('instnames', 'instnames.id', '=', 'institutions.inst_name_id')
             ->select('outlets.latitude', 'outlets.longitude', 'outlets.name', 'instnames.name_en', 'outlets.address_city', 'outlets.address_street')
             ->orderby('name_en')
-            ->get();
+            ->paginate(15);
+
 
 
 
