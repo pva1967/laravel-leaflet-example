@@ -37,6 +37,9 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
     Route::get('/realm_edit', 'AdminController@realm_edit')->name('realm_edit');
     Route::post('/realm_destroy', 'AdminController@realm_destroy')->name('realm_destroy');
 
+    Route::get('/policy_add', 'AdminController@policy_add')->name('policy_add');
+    Route::post('/policy_store', 'AdminController@policy_store')->name('policy_store');
+
     Route::post('/realm_store', 'AdminController@realm_store')->name('realm_store');
     /*Отслыка ссылки на изменение пароля для админов организаций*/
     Route::post('/send_password', 'AdminController@PasswordSend')->name('password.send');

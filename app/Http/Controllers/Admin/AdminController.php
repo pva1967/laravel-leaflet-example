@@ -255,6 +255,45 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard');
 
     }
+    public function policy_add()
+    {
+        $admin = Auth::guard('admin')->user();
+        $institutions = Institution::get()->sortBy('name_ru');
+        if (null!== $admin)
+        {
+            $session = Session::get('SA_Inst_id');
+            $inst_id = $session ?? $institutions->first()->id;
+
+        }
+        else {
+
+            App::abort(500, 'Нет данных об организации');
+        }
+        $instname = DB::table('instnames')->find($inst_id);
+        $instname_ru = $instname->name_ru;
+
+        return view('admin.policy_add', compact('instname_ru', 'inst_id'));
+    }
+    public function policy_store(Request $request)
+    {
+
+        $admin = Auth::guard('admin')->user();
+        if (null == $admin)
+        {
+            return App::abort(403, 'Требуется авторизация');
+        }
+        $data = $request->validate([
+            'inst_id' =>'required' ,
+            'policy' => 'required|url'
+        ]);
+        DB::table('institutions')
+            ->where('id', $data['inst_id'])
+            ->update(['policy' => $data['policy']]);
+
+        return redirect()->route('admin.dashboard');
+
+    }
+
     public function realm_edit()
     {
         $admin = Auth::guard('admin')->user();
