@@ -25,16 +25,6 @@
         <div class="col-md-12">
             <div class="card">
 
-                <div class="card-header">
-                    <form method="GET" action="" accept-charset="UTF-8" class="form-inline">
-                        <div class="form-group">
-                            <label for="q" class="control-label">{{ __('admin.search') }}</label>
-                            <input placeholder="{{ __('admin.search_admin_text') }}" name="q" type="text" id="q" class="form-control mx-sm-2" value="{{ request('q') }}">
-                        </div>
-                        <input type="submit" value="{{ __('admin.search') }}" class="btn btn-secondary">
-                        <a href="{{ route('admin.user_index') }}" class="btn btn-link">{{ __('app.reset') }}</a>
-                    </form>
-                </div>
                 <table class="table table-sm table-responsive-sm">
                     <thead>
                     <tr>
@@ -45,15 +35,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($institutions as $key => $institution)
+                    @foreach($institutions as $institution)
 
                         <tr>
-                            <td class="text-center">{{ $key+1 }}</td>
+                            <td class="text-center">{{$loop->iteration }}</td>
                             <td>{{$institution->name_ru}}</td>
                             <td>{{ $institution->address_city }}, {{ $institution->address_street}}</td>
                             <td>
                                 @if ($institution->policy !== '')
-                                <a href = "{{ $institution->policy }}">{{ __('institution.policy') }}</a></td>
+                                <a href = "{{ $institution->policy }}" target="_blank">{{ __('institution.policy') }}</a></td>
                             @endif
                         </tr>
                     @endforeach

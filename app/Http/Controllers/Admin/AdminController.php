@@ -110,7 +110,7 @@ class AdminController extends Controller
         $admins = DB::table('users')
             ->join('institutions', 'institutions.creator_id', '=', 'users.id')
             ->join('instnames','instnames.id', '=', 'institutions.id')
-            ->select('users.name as name', 'users.email as email', 'instnames.name_ru as instname', 'users.id as user_id')
+            ->select('users.name as name', 'users.email as email', 'instnames.name_ru as instname', 'users.id as user_id', 'users.created_at as created_at', 'users.updated_at as updated_at')
             ->where('name', 'like', '%' . request('q') . '%')
             ->orderBy('instname', 'asc')
             ->get();

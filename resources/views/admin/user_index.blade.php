@@ -50,6 +50,7 @@
                         <td>{{ $admin->instname }}</td>
 
                            <td class="text-center">
+                            @if ($admin->created_at == $admin->updated_at)
                                <form method="POST" action="{{ route('admin.password.send') }}">
                                    @csrf
                                <input id="user_id" type="hidden" name="user_id" value="{{$admin->user_id}}" >
@@ -57,6 +58,7 @@
                                    Выслать админу активацию
                                </button>
                                </form>
+                              @endif
                         </td>
                     </tr>
                     @endforeach
