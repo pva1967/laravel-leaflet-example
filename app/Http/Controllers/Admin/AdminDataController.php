@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use App\Institution;
 use App\Contact;
-use App\Address;
+use App\Address\Address;
 use App\Outlet;
 use App\User;
 use SoapBox\Formatter\Formatter;

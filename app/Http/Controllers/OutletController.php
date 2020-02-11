@@ -8,7 +8,7 @@ use App\Institution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Address;
+use App\Address\Address;
 
 
 class OutletController extends Controller
@@ -131,7 +131,7 @@ class OutletController extends Controller
 
         $newOutlet['location_id'] = $loc_id;
 
-        $address = new Address ($newOutlet['latitude'], $newOutlet['longitude'], 'ru');
+        $address = new Address($newOutlet['latitude'], $newOutlet['longitude'], 'ru');
         $add = $address->getAddress();
         $newOutlet['address_street_ru'] = $add['address_street'];
         $newOutlet['address_city_ru'] = $add['address_city'];
@@ -217,7 +217,7 @@ class OutletController extends Controller
                 'location_type' => 'required',
                 'info_URL' => 'nullable|url'
             ]);
-            $address = new Address ($outletData['latitude'], $outletData['longitude'], 'ru');
+            $address = new Address($outletData['latitude'], $outletData['longitude'], 'ru');
             $add = $address->getAddress();
             $outletData['address_street_ru'] = $add['address_street'];
             $outletData['address_city_ru'] = $add['address_city'];
