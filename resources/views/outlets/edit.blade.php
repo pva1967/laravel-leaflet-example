@@ -219,6 +219,6 @@
     $('#longitude').on('input', updateMarkerByInputs);
 </script>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key={!! env('GOOGLE_API') !!}&language=en">
+        src="https://maps.googleapis.com/maps/api/js?key={!! config('app.google_key') !!}&language=en">
 </script>
 @endpush

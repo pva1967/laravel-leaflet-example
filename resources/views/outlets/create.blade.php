@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header">{{ __('outlet.create') }}</div>
             @if (Request::is('admin/*'))
-            <div method="POST" action="{{ route('admin.outlets.store') }}" accept-charset="UTF-8">
+            <form method="POST" action="{{ route('admin.outlets.store') }}" accept-charset="UTF-8">
             @else
             <form method="POST" action="{{ route('outlets.store') }}" accept-charset="UTF-8">
             @endif
@@ -73,7 +73,7 @@
                 <input type="hidden" id="address_street" name="address_street" value=''>
                 <input type="hidden" id="address_city" name="address_city" value=''>
             </form>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -186,7 +186,7 @@
     $('#longitude').on("input", updateMarkerByInputs);
 </script>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key={!! env('GOOGLE_API') !!}&language=en">
+        src="https://maps.googleapis.com/maps/api/js?key={!! config('app.google_key') !!}&language=en">
 </script>
 
 @endpush

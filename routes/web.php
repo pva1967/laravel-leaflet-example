@@ -75,6 +75,8 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
 Route::get('/admin/outlets', 'OutletController@index')->name('admin.outlets.index');
 Route::get('/admin/outlets/create', 'OutletController@create')->name('admin.outlets.create');
 Route::post('/admin/outlets/store', 'OutletController@store')->name('admin.outlets.store');
+
+
 Route::get('/admin/outlets/{outlet}', 'OutletController@show')->name('admin.outlets.show');
 Route::get('/admin/outlets/{outlet}/edit', 'OutletController@edit')->name('admin.outlets.edit');
 Route::patch('/admin/outlets/{outlet}/update', 'OutletController@update')->name('admin.outlets.update');

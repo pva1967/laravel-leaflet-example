@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use App\Institution;
 use App\Contact;
+use App\Address;
 use App\Outlet;
 use App\User;
 use SoapBox\Formatter\Formatter;
@@ -18,7 +19,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminDataController extends Controller
 {
-    protected $address_street, $address_city;
     public function import()
     {
 
@@ -54,8 +54,8 @@ class AdminDataController extends Controller
                 {
                     $lat=0; $lon=0;
                 }
-
-                $this->address($lat, $lon, 'en');
+                $address = new Address ($lat, $lon, 'en');
+                $add = $address->getAddress();
                 //var_dump ($this->>address_city, $this->address_street);
                 /*Создаем юзера для института*/
                 $name=$inst_key;
@@ -85,8 +85,8 @@ class AdminDataController extends Controller
                     $institution->latitude = $lat;
                     $institution->creator_id = $user->id;
                     $institution->inst_name_id = $user->id;
-                    $institution->address_street = $this->address_street;
-                    $institution->address_city = $this->address_city;
+                    $institution->address_street = $add['address_street'];
+                    $institution->address_city = $add['address_city'];
                     $institution->inst_type = 'IdP+SP';
                     $institution->venue_type = '3,3';
                     $institution->inst_stage = 1;
@@ -167,9 +167,11 @@ class AdminDataController extends Controller
                                 $loc->location_id = "{$institution->inst_id}-{$pref}";
                                 $loc->latitude = strval(round((float)$location['latitude'], 6));
                                  $loc->longitude = strval(round((float)$location['longitude'], 6));
-                                $this->address($loc->latitude, $loc->longitude, 'en');
-                                $loc->address_street = $this->address_street;
-                                $loc->address_city = $this->address_city;
+
+                                $address = new Address ($loc->latitude, $loc->longitude, 'en');
+                                $add = $address->getAddress();
+                                $loc->address_street = $add['address_street'];
+                                $loc->address_city = $add['address_city'];
                                 $loc->AP_no = $location['AP_no'] ?? 1;
                                 $loc->info_URL=$institution->info_URL_en;
 
@@ -187,9 +189,12 @@ class AdminDataController extends Controller
                             $loc->location_id = "{$institution->inst_id}-01";
                             $loc->latitude = strval(round((float)$location['latitude'], 6));
                             $loc->longitude = strval(round((float)$location['longitude'], 6));
-                            $this->address($loc->latitude, $loc->longitude, 'en');
-                            $loc->address_street = $this->address_street;
-                            $loc->address_city = $this->address_city;
+                            $address = new Address ($loc->latitude, $loc->longitude, 'en');
+                            $add = $address->getAddress();
+
+
+                            $loc->address_street = $add['address_street'];
+                            $loc->address_city = $add['address_city'];
                             $loc->AP_no = $location['AP_no'] ?? 1;
                             $loc->info_URL=$institution->info_URL_en;
 
@@ -379,9 +384,10 @@ class AdminDataController extends Controller
           $outlets = Outlet::all();
        foreach ($outlets as $outlet) {
            if (!$outlet->address_street_ru) {
-               $this->address($outlet->latitude, $outlet->longitude, 'ru');
-               $outlet->address_city_ru = $this->address_city;
-               $outlet->address_street_ru = $this->address_street;
+               $address = new Address ($outlet->latitude, $outlet->longitude, 'ru');
+               $add = $address->getAddress();
+               $outlet->address_city_ru = $add['address_city'];
+               $outlet->address_street_ru =$add['address_street'];
                $outlet->save();
            }
        }
