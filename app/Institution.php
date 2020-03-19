@@ -15,6 +15,11 @@ class Institution extends Model
     /**
      * @return string
      */
+    public function proxies(){
+
+        return $this->hasMany('App\Proxy', 'inst_id', 'id');
+
+    }
     public function getLocAttribute()
     {
         $venue ='';

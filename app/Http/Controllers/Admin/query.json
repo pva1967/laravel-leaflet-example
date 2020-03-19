@@ -1,0 +1,35 @@
+{
+    "query": {
+        "bool": {
+            "should": [{
+                "bool": {
+                    "must": [{
+                        "match": {
+                            "preference_1": "Apples"
+                        }
+                    }, {
+                        "match": {
+                            "preference_2": "Bananas"
+                        }
+                    }]
+                }
+            }, {
+                "bool": {
+                    "must": [{
+                        "match": {
+                            "preference_1": "Apples"
+                        }
+                    }, {
+                        "match": {
+                            "preference_2": "Cherries"
+                        }
+                    }]
+                }
+            }, {
+                "match": {
+                    "preference_1": "Grapefruit"
+                }
+            }]
+        }
+    }
+}

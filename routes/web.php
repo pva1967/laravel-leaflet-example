@@ -53,7 +53,7 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
     Route::get('/export', 'AdminDataController@export')->name('data.export');
     Route::get('/export_m', 'AdminDataController@export_m')->name('data.export_m');
     Route::get('/fill_ru_address', 'AdminDataController@fill_ru_address')->name('data.fill_ru_address');
-
+    Route::get('/stata', 'AdminDataController@stata')->name('data.stata');
 
     Route::namespace('Auth')->group(function(){
 
@@ -162,6 +162,7 @@ Route::get('contacts/destroy', function(){
     return App::abort(404);
 });
 
+Route::get('statistics', 'StatisticsController@index')->name('statistics.index');
 
 /*Adding contacts routes*/
 Route::get('contacts_outlets/{outlet}/edit', 'Cont2locController@edit')->name('cont2outlets.edit');

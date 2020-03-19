@@ -9,6 +9,7 @@ use App\Contact;
 use App\Address\Address;
 use App\Outlet;
 use App\User;
+use App\Connection;
 use SoapBox\Formatter\Formatter;
 use Spatie\ArrayToXml\ArrayToXml;
 
@@ -218,41 +219,37 @@ class AdminDataController extends Controller
     }
     public function export(){
 
-        $last_outlet = DB::table('outlets')
-            ->orderBy('updated_at', 'desc')
-            ->first();
+            $last_outlet = DB::table('outlets')
+                ->orderBy('updated_at', 'desc')
+                ->first();
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://eduroam.ru/general/institution.xml");
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://eduroam.ru/general/institution.xml");
 // SSL important
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
-        curl_setopt($ch, CURLOPT_FILETIME, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
+            curl_setopt($ch, CURLOPT_FILETIME, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 
-        $output = curl_exec($ch);
+            $output = curl_exec($ch);
 
-        if ($output === false) {
-            $timestamp = 0;
-        }
-        else {
-            $timestamp = curl_getinfo($ch, CURLINFO_FILETIME);
+            if ($output === false) {
+                $timestamp = 0;
+            }
+            else {
+                $timestamp = curl_getinfo($ch, CURLINFO_FILETIME);
 
-        }
+            }
 
-        curl_close($ch);
-        if ($timestamp > strtotime($last_outlet->updated_at)) {
-            echo $timestamp."<br>";
-            echo $last_outlet->updated_at;
-            echo "NULL";
-            return;
-        }
+            curl_close($ch);
+            if ($timestamp > strtotime($last_outlet->updated_at)) {
+                echo $timestamp."<br>";
+                echo $last_outlet->updated_at;
+                echo "NULL";
+                return;
+            }
 
-
-
-
-
-        $institutions = Institution::all();
+       $institutions = Institution::all();
         foreach ($institutions as $institution){
             $institution_xml =  array('instid' => $institution->inst_id);
             $institution_xml['ROid'] =  config('data.ROid');
@@ -343,6 +340,55 @@ class AdminDataController extends Controller
 
     }
 
+    public function stata()
+    {
+
+        $last_connection = DB::table('connections')
+            ->orderBy('time_conn', 'desc')
+            ->first();
+        $last_time = $last_connection ? Carbon::parse($last_connection->time_conn)->toDateTimeLocalString() : Carbon::parse("2020-03-01 00:00")->toDateTimeLocalString();
+      //dd($last_time);
+        $now = Carbon::now(new \DateTimeZone('Europe/Moscow'))->toDateTimeLocalString();
+
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "http://admin:SomeKarandashPargolovo@elk.runnet.ru:9200/filebeat*/_search?size=10000");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        $curl_opts = "{ 
+                        \"query\": {  
+                                \"bool\": { 
+                                     \"must\":  { \"match\": { \"frres\":   \"OK\"}},     
+                                                \"filter\":  { \"range\":
+                                                                        { \"@timestamp\": { \"gt\": \"{$last_time}\", \"lt\": \"{$now}\", 
+                                                                            \"time_zone\": \"Europe/Moscow\",
+                                                                        \"format\": \"date_hour_minute_second\"
+                                                                        }}}          }  }}";
+        //dd ($curl_opts);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $curl_opts);
+
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        }
+        curl_close($ch);
+        $res = json_decode($result, true);
+        $vyv = array();
+        foreach($res['hits']['hits'] as $hit){
+            $vyv[]=array('proxy'=>$hit['_source']['frremoteproxy'], 'realm'=>$hit['_source']['frrealm'],
+                'time_conn' => Carbon::parse($hit['_source']['@timestamp'])-> setTimezone('Europe/Moscow'),
+                'unique' =>$hit['_source']['fruser']);
+        }
+        $vyv = collect($vyv)->sortBy('time_conn')->toArray();
+        Connection::insert($vyv);
+
+
+    }
     public function export_m()
     {
         $markers=array();
