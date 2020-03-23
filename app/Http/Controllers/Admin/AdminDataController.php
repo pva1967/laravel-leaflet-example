@@ -346,7 +346,7 @@ class AdminDataController extends Controller
         $last_connection = DB::table('connections')
             ->orderBy('time_conn', 'desc')
             ->first();
-        $last_time = $last_connection ? Carbon::parse($last_connection->time_conn)->toDateTimeLocalString() : Carbon::parse("2020-03-01 00:00")->toDateTimeLocalString();
+        $last_time = $last_connection ? Carbon::parse($last_connection->time_conn)->toDateTimeLocalString() : Carbon::parse("2020-03-16 00:00")->toDateTimeLocalString();
       //dd($last_time);
         $now = Carbon::now(new \DateTimeZone('Europe/Moscow'))->toDateTimeLocalString();
 
