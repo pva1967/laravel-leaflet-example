@@ -343,10 +343,10 @@ class AdminDataController extends Controller
     public function stata()
     {
 
-        $last_connection = DB::table('connections')
-            ->orderBy('time_conn', 'desc')
+        $last_connection = DB::table('dayconnections')
+            ->orderBy('max_time_conn', 'desc')
             ->first();
-        $last_time = $last_connection ? Carbon::parse($last_connection->time_conn)->toDateTimeLocalString() : Carbon::parse("2020-03-16 00:00")->toDateTimeLocalString();
+        $last_time = $last_connection ? Carbon::parse($last_connection->max_time_conn)->toDateTimeLocalString() : Carbon::parse("2020-03-16 00:00")->toDateTimeLocalString();
       //dd($last_time);
         $now = Carbon::now(new \DateTimeZone('Europe/Moscow'))->toDateTimeLocalString();
 
@@ -386,6 +386,12 @@ class AdminDataController extends Controller
         }
         $vyv = collect($vyv)->sortBy('time_conn')->toArray();
         Connection::insert($vyv);
+        $new_connection = DB::table('connections')
+            ->orderBy('time_conn', 'desc')
+            ->first();
+        if ($new_connection && $new_connection->time_conn > $last_time ) {
+           echo ("OK");
+        }
 
 
     }
